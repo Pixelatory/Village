@@ -1,0 +1,14 @@
+package model.habitants;
+
+/**
+ * An abstract class which divides the many types of production model.habitants into groups, this one being the Miners.
+ * 
+ * @author 6177000
+ * @see ProductionHabitant
+ * @see GoldMiner
+ * @see IronMiner
+ *
+ */
+public abstract class Miner extends ProductionHabitant {
+
+}
