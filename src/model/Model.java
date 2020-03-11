@@ -28,6 +28,10 @@ public class Model {
     private int mouseClickedX;
     private int mouseClickedY;
 
+    public Model() {
+        village = new Village();
+    }
+
     /*
         Setter/Getter functions
      */

@@ -1,6 +1,5 @@
 package game;
 
-import model.buildings.*;
 import controller.Controller;
 import engine.AbstractGame;
 import engine.GameContainer;
@@ -9,10 +8,9 @@ import engine.audio.Sound;
 import engine.gfx.Font;
 import engine.gfx.Image;
 import engine.renderPrimitives.Rectangle;
-import model.habitants.ProductionHabitant;
 import model.Model;
+import model.buildings.*;
 import view.View;
-import model.village.Village;
 
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -24,41 +22,7 @@ import java.awt.event.MouseEvent;
  * @author 6177000
  *
  */
-public class GameManager extends AbstractGame {	
-	
-	private Font regularFont = new Font("/fonts/font-2.png");
-	private Font smallFont = new Font("/fonts/font-3.png");
-	private Village village;
-	private Building selectedNewConstruction = null;
-	private Building selectedForUpgrade = null;
-	private boolean buildMode = false;
-	private boolean upgradeMode = false;
-	private boolean trainingMode = false;
-	private int mouseX;
-	private int mouseY;
-	
-	// In order to accurately move the model.buildings without it "jumping" to the center of them, just get where you clicked them at
-	private int mouseClickedX;
-	private int mouseClickedY;
-	
-	private Rectangle toolbar = new Rectangle(0,GameContainer.getHeight() - 50, GameContainer.getWidth(), 50, Color.gray);
-
-	// Images
-	private Image backgroundImage = new Image("/grass.png",0,0);
-	private Image buildIcon = new Image("/icons/build.png", toolbar.getX() + 5, toolbar.getY() + 16);
-	private Image upgradeIcon = new Image("/icons/upgrade.png", toolbar.getX() + 5, toolbar.getY() + 16);
-	private Image upgradeTroopIcon = new Image("/icons/upgradeTroop.png", toolbar.getX() + 145, toolbar.getY() + 16);
-	private Image trainIcon = new Image("/icons/train.png",toolbar.getX() + 75, toolbar.getY() + 16);
-	private Image trainCombatantIcon = new Image("/icons/trainCombatant.png", toolbar.getX() + 75, toolbar.getY() + 16);
-	
-	// Used for the build bar
-	private Rectangle archerTowerSymbol = new ArcherTower(toolbar.getX() + 25,toolbar.getY() + 15).getRect();
-	private Rectangle cannonSymbol = new Cannon(toolbar.getX() + 100, toolbar.getY() + 15).getRect();
-	private Rectangle farmSymbol = new Farm(toolbar.getX() + 175, toolbar.getY() + 15).getRect();
-	private Rectangle goldMineSymbol = new GoldMine(toolbar.getX() + 250, toolbar.getY() + 15).getRect();
-	private Rectangle ironMineSymbol = new IronMine(toolbar.getX() + 325, toolbar.getY() + 15).getRect();
-	private Rectangle lumbermillSymbol = new LumberMill(toolbar.getX() + 400, toolbar.getY() + 15).getRect();
-
+public class GameManager extends AbstractGame {
 	Controller controller;
 	Model model;
 	View view;
@@ -66,10 +30,6 @@ public class GameManager extends AbstractGame {
 	// Used for combatant training bar
 	
 	public GameManager() {
-		village = new Village();
-		toolbar.setVisible(true);
-		new Sound("/music/main-theme.wav").loop();
-
 		this.controller = new Controller();
 		this.model = new Model();
 		this.view = new View();
