@@ -1,17 +1,33 @@
 package controller;
 
-import model.buildings.*;
 import engine.GameContainer;
-import engine.audio.Sound;
+import engine.gfx.Image;
+import engine.renderPrimitives.Rectangle;
 import model.Model;
+import model.buildings.*;
+import model.habitants.ProductionHabitant;
+import view.View;
+
+import java.awt.event.MouseEvent;
 
 public final class Controller {
 
     private int mouseX;
     private int mouseY;
+    private int mouseClickedX;
+    private int mouseClickedY;
 
     float imageTileRate = 0;
-    public void update(GameContainer gc, Model model, float dt) {
+    public void update(GameContainer gc, Model model, View view, float dt) {
+        boolean buildMode = model.isBuildMode();
+        boolean upgradeMode = model.isUpgradeMode();
+        boolean trainingMode = model.isTrainingMode();
+        Building selectedForUpgrade = model.getSelectedForUpgrade();
+        Building selectedNewConstruction = model.getSelectedNewConstruction();
+        Rectangle toolbar = view.getToolbar();
+        mouseX = model.getMouseX();
+        mouseY = model.getMouseY();
+
         /* Here for reference on how to get keyboard input
 		 * if(gc.getInput().isKeyDown(KeyEvent.VK_A)) {
 			sound.play();
@@ -21,11 +37,6 @@ public final class Controller {
         if(imageTileRate > 23)
             imageTileRate = 0;
 
-        mouseX = gc.getInput().getMouseX();
-        mouseY = gc.getInput().getMouseY();
-
-        SoundPlay sound = file -> new Sound(file).play();
-
         if(toolbar.isVisible()
                 && rightClickUp(gc)) {
             buildMode = false;
@@ -33,11 +44,11 @@ public final class Controller {
             trainingMode = false;
             selectedForUpgrade = null;
             selectedNewConstruction = null;
-            sound.play("/sounds/button_click.wav");
+            view.getClickSound().play();
             return;
         } // RIGHT CLICKING ANYWHERE WHEN TOOLBAR IS VISIBLE
 
-        for(Building b : model.village.getBuildings()) {
+        for(Building b : model.getVillage().getBuildings()) {
             if(b != selectedForUpgrade
                     && mouseInBounds(b)
                     && leftClickDown(gc)) {
@@ -47,7 +58,7 @@ public final class Controller {
                 selectedForUpgrade = b;
                 mouseClickedX = mouseX - b.xPos();
                 mouseClickedY = mouseY - b.yPos();
-                sound.play("/sounds/button_click.wav");
+                view.getClickSound().play();
                 return;
             }
         } // CLICKING ON A BUILDING ON SCREEN
@@ -57,27 +68,27 @@ public final class Controller {
                 && leftClickDown(gc)) {
             mouseClickedX = mouseX - selectedForUpgrade.xPos();
             mouseClickedY = mouseY - selectedForUpgrade.yPos();
-            sound.play("/sounds/button_click.wav");
+            view.getClickSound().play();
         } // WHEN MOVING A BUILDING THAT WAS ALREADY CLICKED
 
         if(selectedForUpgrade != null
                 && toolbar.isVisible()
                 && leftClickUp(gc)) {
-            if(mouseInBounds(upgradeIcon)) {
-                sound.play("/sounds/button_click.wav");
-                model.village.performUpgrade(selectedForUpgrade);
+            if(mouseInBounds(view.getUpgradeIcon())) {
+                view.getClickSound().play();
+                model.getVillage().performUpgrade(selectedForUpgrade);
                 return;
             } // CLICKING UPGRADE BUTTON
             else if (selectedForUpgrade instanceof ProductionBuilding
-                    && mouseInBounds(trainIcon)) {
-                sound.play("/sounds/button_click.wav");
-                model.village.trainIndividual(selectedForUpgrade);
+                    && mouseInBounds(view.getTrainIcon())) {
+                view.getClickSound().play();
+                model.getVillage().trainIndividual((ProductionBuilding<ProductionHabitant>) selectedForUpgrade);
                 return;
             } // CLICKING TRAIN BUTTON (FOR PRODUCTION BUILDINGS)
             else if (selectedForUpgrade instanceof ProductionBuilding
-                    && mouseInBounds(upgradeTroopIcon)) {
-                sound.play("/sounds/button_click.wav");
-                model.village.performUpgradeHabitant(selectedForUpgrade);
+                    && mouseInBounds(view.getUpgradeTroopIcon())) {
+                view.getClickSound().play();
+                model.getVillage().performUpgradeHabitant((ProductionBuilding) selectedForUpgrade);
                 return;
             } // CLICKING UPGRADE WORKER BUTTON (FOR PRODUCTION BUILDINGS)
         } // UPGRADE MODE
@@ -99,11 +110,11 @@ public final class Controller {
             if(rightClickUp(gc)) { // RIGHT CLICK AFTER SELECTING BUILDING FOR CONSTRUCTION
                 selectedNewConstruction = null;
                 toolbar.setVisible(true);
-                sound.play("/sounds/button_click.wav");
+                view.getClickSound().play();
                 return;
             } else if(leftClickUp(gc)) { // LEFT CLICK AFTER SELECTING BUILDING FOR CONSTRUCTION
-                sound.play("/sounds/button_click.wav");
-                model.village.newConstruction(selectedNewConstruction);
+                view.getClickSound().play();
+                model.getVillage().newConstruction(selectedNewConstruction);
                 selectedNewConstruction = null;
                 toolbar.setVisible(true);
                 return;
@@ -115,54 +126,54 @@ public final class Controller {
         } else {
             if(buildMode
                     && leftClickUp(gc)) {
-                if(mouseInBounds(archerTowerSymbol)) {
-                    sound.play("/sounds/button_click.wav");
-                    if(model.village.canConstruct(new ArcherTower(mouseX,mouseY))) {
+                if(mouseInBounds(view.getArcherTowerSymbol())) {
+                    view.getClickSound().play();
+                    if(model.getVillage().canConstruct(new ArcherTower(mouseX,mouseY))) {
                         selectedNewConstruction = new ArcherTower(mouseX, mouseY);
                         toolbar.setVisible(false);
                         return;
                     }
                 }
 
-                if(mouseInBounds(cannonSymbol)) {
-                    sound.play("/sounds/button_click.wav");
-                    if(model.village.canConstruct(new Cannon(mouseX,mouseY))) {
+                if(mouseInBounds(view.getCannonSymbol())) {
+                    view.getClickSound().play();
+                    if(model.getVillage().canConstruct(new Cannon(mouseX,mouseY))) {
                         selectedNewConstruction = new Cannon(mouseX, mouseY);
                         toolbar.setVisible(false);
                         return;
                     }
                 }
 
-                if(mouseInBounds(farmSymbol)) {
-                    sound.play("/sounds/button_click.wav");
-                    if(model.village.canConstruct(new Farm(mouseX,mouseY))) {
+                if(mouseInBounds(view.getFarmSymbol())) {
+                    view.getClickSound().play();
+                    if(model.getVillage().canConstruct(new Farm(mouseX,mouseY))) {
                         selectedNewConstruction = new Farm(mouseX, mouseY);
                         toolbar.setVisible(false);
                         return;
                     }
                 }
 
-                if(mouseInBounds(goldMineSymbol)) {
-                    sound.play("/sounds/button_click.wav");
-                    if(model.village.canConstruct(new GoldMine(mouseX,mouseY))) {
+                if(mouseInBounds(view.getGoldMineSymbol())) {
+                    view.getClickSound().play();
+                    if(model.getVillage().canConstruct(new GoldMine(mouseX,mouseY))) {
                         selectedNewConstruction = new GoldMine(mouseX, mouseY);
                         toolbar.setVisible(false);
                         return;
                     }
                 }
 
-                if(mouseInBounds(ironMineSymbol)) {
-                    sound.play("/sounds/button_click.wav");
-                    if(model.village.canConstruct(new IronMine(mouseX,mouseY))) {
+                if(mouseInBounds(view.getIronMineSymbol())) {
+                    view.getClickSound().play();
+                    if(model.getVillage().canConstruct(new IronMine(mouseX,mouseY))) {
                         selectedNewConstruction = new IronMine(mouseX, mouseY);
                         toolbar.setVisible(false);
                         return;
                     }
                 }
 
-                if(mouseInBounds(lumbermillSymbol)) {
-                    sound.play("/sounds/button_click.wav");
-                    if(model.village.canConstruct(new LumberMill(mouseX,mouseY))) {
+                if(mouseInBounds(view.getLumbermillSymbol())) {
+                    view.getClickSound().play();
+                    if(model.getVillage().canConstruct(new LumberMill(mouseX,mouseY))) {
                         selectedNewConstruction = new LumberMill(mouseX, mouseY);
                         toolbar.setVisible(false);
                         return;
@@ -174,9 +185,9 @@ public final class Controller {
         if(toolbar.isVisible()
                 && !upgradeMode
                 && !trainingMode
-                && mouseInBounds(buildIcon)
+                && mouseInBounds(view.getBuildIcon())
                 && leftClickUp(gc)) {
-            sound.play("/sounds/button_click.wav");
+            view.getClickSound().play();
             buildMode = true;
         }
 
@@ -185,6 +196,58 @@ public final class Controller {
                 && !upgradeMode
                 && !buildMode) {
         }
-        //System.out.println(mouseX + " " + mouseY + " " + buildModeButton.getX() + " " + buildModeButton.getY());
+    }
+
+    private boolean mouseInBounds(int x, int y, int width, int height) {
+        if(mouseX >= x
+        && mouseX <= width + x
+        && mouseY >= y
+        && mouseY <= height + y)
+            return true;
+        return false;
+    }
+
+    private boolean mouseInBounds(Image image) {
+        if(image.isVisible())
+            return mouseInBounds(image.getX(), image.getY(), image.getWidth(), image.getHeight());
+        return false;
+    }
+
+    private boolean mouseInBounds(Rectangle rect) {
+        if(rect.isVisible())
+            return mouseInBounds(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+        return false;
+    }
+
+    private boolean mouseInBounds(Building building) {
+        Rectangle rect = building.getRect();
+        return mouseInBounds(rect);
+    }
+
+    @SuppressWarnings("unused")
+    private boolean overlap(Rectangle rect1, Rectangle rect2) {
+        if(rect1.getX() > rect2.getX() + rect2.getWidth() || rect2.getX() > rect1.getX() + rect1.getWidth())
+            return false;
+
+        if(rect1.getY() < rect2.getY() + rect2.getHeight() || rect2.getY() < rect1.getY() + rect1.getHeight())
+            return false;
+
+        return true;
+    }
+
+    private boolean leftClickUp(GameContainer gc) {
+        return gc.getInput().isButtonUp(MouseEvent.BUTTON1);
+    }
+
+    private boolean leftClickDown(GameContainer gc) {
+        return gc.getInput().isButtonDown(MouseEvent.BUTTON1);
+    }
+
+    private boolean holdingLeftClick(GameContainer gc) {
+        return gc.getInput().isButton(MouseEvent.BUTTON1);
+    }
+
+    private boolean rightClickUp(GameContainer gc) {
+        return gc.getInput().isButtonUp(MouseEvent.BUTTON3);
     }
 }

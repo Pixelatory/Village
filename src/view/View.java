@@ -25,6 +25,7 @@ public final class View {
     private Image backgroundImage = new Image("/grass.png",0,0);
     private Image buildIcon = new Image("/icons/build.png", toolbar.getX() + 5, toolbar.getY() + 16);
     private Image upgradeIcon = new Image("/icons/upgrade.png", toolbar.getX() + 5, toolbar.getY() + 16);
+
     private Image upgradeTroopIcon = new Image("/icons/upgradeTroop.png", toolbar.getX() + 145, toolbar.getY() + 16);
     private Image trainIcon = new Image("/icons/train.png",toolbar.getX() + 75, toolbar.getY() + 16);
     private Image trainCombatantIcon = new Image("/icons/trainCombatant.png", toolbar.getX() + 75, toolbar.getY() + 16);
@@ -40,6 +41,9 @@ public final class View {
     //Sounds
     private Sound clickSound = new Sound("/sounds/button_click.wav");
     private Sound mainMusic = new Sound("/music/main-theme.wav");
+
+    private int mouseX;
+    private int mouseY;
 
     public View() {
         toolbar.setVisible(true);
@@ -146,12 +150,139 @@ public final class View {
         r.drawRect(toolbar);
     }
 
-    private boolean mouseInBounds(int x, int y, int width, int height) {
-        if(mouseX >= x
-                && mouseX <= width + x
-                && mouseY >= y
-                && mouseY <= height + y)
-            return true;
-        return false;
+    public Font getRegularFont() {
+        return regularFont;
+    }
+
+    public void setRegularFont(Font regularFont) {
+        this.regularFont = regularFont;
+    }
+
+    public Font getSmallFont() {
+        return smallFont;
+    }
+
+    public void setSmallFont(Font smallFont) {
+        this.smallFont = smallFont;
+    }
+
+    public Rectangle getToolbar() {
+        return toolbar;
+    }
+
+    public void setToolbar(Rectangle toolbar) {
+        this.toolbar = toolbar;
+    }
+
+    public Image getBackgroundImage() {
+        return backgroundImage;
+    }
+
+    public void setBackgroundImage(Image backgroundImage) {
+        this.backgroundImage = backgroundImage;
+    }
+
+    public Image getBuildIcon() {
+        return buildIcon;
+    }
+
+    public void setBuildIcon(Image buildIcon) {
+        this.buildIcon = buildIcon;
+    }
+
+    public Image getUpgradeIcon() {
+        return upgradeIcon;
+    }
+
+    public void setUpgradeIcon(Image upgradeIcon) {
+        this.upgradeIcon = upgradeIcon;
+    }
+
+    public Image getUpgradeTroopIcon() {
+        return upgradeTroopIcon;
+    }
+
+    public void setUpgradeTroopIcon(Image upgradeTroopIcon) {
+        this.upgradeTroopIcon = upgradeTroopIcon;
+    }
+
+    public Image getTrainIcon() {
+        return trainIcon;
+    }
+
+    public void setTrainIcon(Image trainIcon) {
+        this.trainIcon = trainIcon;
+    }
+
+    public Image getTrainCombatantIcon() {
+        return trainCombatantIcon;
+    }
+
+    public void setTrainCombatantIcon(Image trainCombatantIcon) {
+        this.trainCombatantIcon = trainCombatantIcon;
+    }
+
+    public Rectangle getArcherTowerSymbol() {
+        return archerTowerSymbol;
+    }
+
+    public void setArcherTowerSymbol(Rectangle archerTowerSymbol) {
+        this.archerTowerSymbol = archerTowerSymbol;
+    }
+
+    public Rectangle getCannonSymbol() {
+        return cannonSymbol;
+    }
+
+    public void setCannonSymbol(Rectangle cannonSymbol) {
+        this.cannonSymbol = cannonSymbol;
+    }
+
+    public Rectangle getFarmSymbol() {
+        return farmSymbol;
+    }
+
+    public void setFarmSymbol(Rectangle farmSymbol) {
+        this.farmSymbol = farmSymbol;
+    }
+
+    public Rectangle getGoldMineSymbol() {
+        return goldMineSymbol;
+    }
+
+    public void setGoldMineSymbol(Rectangle goldMineSymbol) {
+        this.goldMineSymbol = goldMineSymbol;
+    }
+
+    public Rectangle getIronMineSymbol() {
+        return ironMineSymbol;
+    }
+
+    public void setIronMineSymbol(Rectangle ironMineSymbol) {
+        this.ironMineSymbol = ironMineSymbol;
+    }
+
+    public Rectangle getLumbermillSymbol() {
+        return lumbermillSymbol;
+    }
+
+    public void setLumbermillSymbol(Rectangle lumbermillSymbol) {
+        this.lumbermillSymbol = lumbermillSymbol;
+    }
+
+    public Sound getClickSound() {
+        return clickSound;
+    }
+
+    public void setClickSound(Sound clickSound) {
+        this.clickSound = clickSound;
+    }
+
+    public Sound getMainMusic() {
+        return mainMusic;
+    }
+
+    public void setMainMusic(Sound mainMusic) {
+        this.mainMusic = mainMusic;
     }
 }
