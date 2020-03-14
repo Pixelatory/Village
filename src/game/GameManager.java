@@ -35,6 +35,7 @@ public class GameManager extends AbstractGame {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void update(GameContainer gc, float dt) {
+		model.update(gc);
 		controller.update(gc,model,view,dt);
 	}
 

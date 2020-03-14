@@ -27,6 +27,8 @@ public final class Controller {
         Rectangle toolbar = view.getToolbar();
         mouseX = model.getMouseX();
         mouseY = model.getMouseY();
+        mouseClickedX = model.getMouseClickedX();
+        mouseClickedY = model.getMouseClickedY();
 
         /* Here for reference on how to get keyboard input
 		 * if(gc.getInput().isKeyDown(KeyEvent.VK_A)) {
@@ -39,11 +41,11 @@ public final class Controller {
 
         if(toolbar.isVisible()
                 && rightClickUp(gc)) {
-            buildMode = false;
-            upgradeMode = false;
-            trainingMode = false;
-            selectedForUpgrade = null;
-            selectedNewConstruction = null;
+            model.setBuildMode(false);
+            model.setUpgradeMode(false);
+            model.setTrainingMode(false);
+            model.setSelectedNewConstruction(null);
+            model.setSelectedForUpgrade(null);
             view.getClickSound().play();
             return;
         } // RIGHT CLICKING ANYWHERE WHEN TOOLBAR IS VISIBLE
@@ -52,12 +54,12 @@ public final class Controller {
             if(b != selectedForUpgrade
                     && mouseInBounds(b)
                     && leftClickDown(gc)) {
-                upgradeMode = true;
-                buildMode = false;
-                trainingMode = false;
-                selectedForUpgrade = b;
-                mouseClickedX = mouseX - b.xPos();
-                mouseClickedY = mouseY - b.yPos();
+                model.setUpgradeMode(true);
+                model.setBuildMode(false);
+                model.setTrainingMode(false);
+                model.setSelectedForUpgrade(b);
+                model.setMouseClickedX(mouseX - b.xPos());
+                model.setMouseClickedY(mouseY - b.yPos());
                 view.getClickSound().play();
                 return;
             }
@@ -66,9 +68,10 @@ public final class Controller {
         if(selectedForUpgrade != null
                 && !mouseInBounds(toolbar)
                 && leftClickDown(gc)) {
-            mouseClickedX = mouseX - selectedForUpgrade.xPos();
-            mouseClickedY = mouseY - selectedForUpgrade.yPos();
+            model.setMouseClickedX(mouseX - selectedForUpgrade.xPos());
+            model.setMouseClickedY(mouseY - selectedForUpgrade.yPos());
             view.getClickSound().play();
+            return;
         } // WHEN MOVING A BUILDING THAT WAS ALREADY CLICKED
 
         if(selectedForUpgrade != null
@@ -101,21 +104,28 @@ public final class Controller {
                 && upgradeMode
                 && holdingLeftClick(gc)
                 && !mouseInBounds(toolbar)) {
-            selectedForUpgrade.setXPos(mouseX - mouseClickedX);
-            selectedForUpgrade.setYPos(mouseY - mouseClickedY);
+
+            boolean overlap = false;
+            for(Building b : model.getVillage().getBuildings()) {
+                overlap = overlap(b,selectedForUpgrade);
+            }
+            if(!overlap) {
+                selectedForUpgrade.setXPos(mouseX - mouseClickedX);
+                selectedForUpgrade.setYPos(mouseY - mouseClickedY);
+            }
             return;
         } // HOLDING LEFT CLICK ON BUILDING AFTER SELECTING IT
 
         if(selectedNewConstruction != null) {
             if(rightClickUp(gc)) { // RIGHT CLICK AFTER SELECTING BUILDING FOR CONSTRUCTION
-                selectedNewConstruction = null;
+                model.setSelectedNewConstruction(null);
                 toolbar.setVisible(true);
                 view.getClickSound().play();
                 return;
             } else if(leftClickUp(gc)) { // LEFT CLICK AFTER SELECTING BUILDING FOR CONSTRUCTION
                 view.getClickSound().play();
                 model.getVillage().newConstruction(selectedNewConstruction);
-                selectedNewConstruction = null;
+                model.setSelectedNewConstruction(null);
                 toolbar.setVisible(true);
                 return;
             } else { // JUST FOR MOVING THE BUILDING AFTER SELECTING IT FOR CONSTRUCTION
@@ -125,11 +135,11 @@ public final class Controller {
             }
         } else {
             if(buildMode
-                    && leftClickUp(gc)) {
+            && leftClickUp(gc)) {
                 if(mouseInBounds(view.getArcherTowerSymbol())) {
                     view.getClickSound().play();
                     if(model.getVillage().canConstruct(new ArcherTower(mouseX,mouseY))) {
-                        selectedNewConstruction = new ArcherTower(mouseX, mouseY);
+                        model.setSelectedNewConstruction(new ArcherTower(mouseX,mouseY));
                         toolbar.setVisible(false);
                         return;
                     }
@@ -138,7 +148,7 @@ public final class Controller {
                 if(mouseInBounds(view.getCannonSymbol())) {
                     view.getClickSound().play();
                     if(model.getVillage().canConstruct(new Cannon(mouseX,mouseY))) {
-                        selectedNewConstruction = new Cannon(mouseX, mouseY);
+                        model.setSelectedNewConstruction(new Cannon(mouseX, mouseY));
                         toolbar.setVisible(false);
                         return;
                     }
@@ -147,7 +157,7 @@ public final class Controller {
                 if(mouseInBounds(view.getFarmSymbol())) {
                     view.getClickSound().play();
                     if(model.getVillage().canConstruct(new Farm(mouseX,mouseY))) {
-                        selectedNewConstruction = new Farm(mouseX, mouseY);
+                        model.setSelectedNewConstruction(new Farm(mouseX, mouseY));
                         toolbar.setVisible(false);
                         return;
                     }
@@ -156,7 +166,7 @@ public final class Controller {
                 if(mouseInBounds(view.getGoldMineSymbol())) {
                     view.getClickSound().play();
                     if(model.getVillage().canConstruct(new GoldMine(mouseX,mouseY))) {
-                        selectedNewConstruction = new GoldMine(mouseX, mouseY);
+                        model.setSelectedNewConstruction(new GoldMine(mouseX, mouseY));
                         toolbar.setVisible(false);
                         return;
                     }
@@ -165,7 +175,7 @@ public final class Controller {
                 if(mouseInBounds(view.getIronMineSymbol())) {
                     view.getClickSound().play();
                     if(model.getVillage().canConstruct(new IronMine(mouseX,mouseY))) {
-                        selectedNewConstruction = new IronMine(mouseX, mouseY);
+                        model.setSelectedNewConstruction(new IronMine(mouseX, mouseY));
                         toolbar.setVisible(false);
                         return;
                     }
@@ -174,7 +184,7 @@ public final class Controller {
                 if(mouseInBounds(view.getLumbermillSymbol())) {
                     view.getClickSound().play();
                     if(model.getVillage().canConstruct(new LumberMill(mouseX,mouseY))) {
-                        selectedNewConstruction = new LumberMill(mouseX, mouseY);
+                        model.setSelectedNewConstruction(new LumberMill(mouseX, mouseY));
                         toolbar.setVisible(false);
                         return;
                     }
@@ -183,19 +193,20 @@ public final class Controller {
         }
 
         if(toolbar.isVisible()
-                && !upgradeMode
-                && !trainingMode
-                && mouseInBounds(view.getBuildIcon())
-                && leftClickUp(gc)) {
+        && !upgradeMode
+        && !trainingMode
+        && mouseInBounds(view.getBuildIcon())
+        && leftClickUp(gc)) {
             view.getClickSound().play();
-            buildMode = true;
-        }
+            model.setBuildMode(true);
+        } // CLICKING ON BUILD BUTTON
 
         if(toolbar.isVisible()
                 && trainingMode
                 && !upgradeMode
                 && !buildMode) {
-        }
+
+        } // CLICKING ON TRAIN BUTTON
     }
 
     private boolean mouseInBounds(int x, int y, int width, int height) {
@@ -224,12 +235,21 @@ public final class Controller {
         return mouseInBounds(rect);
     }
 
-    @SuppressWarnings("unused")
     private boolean overlap(Rectangle rect1, Rectangle rect2) {
         if(rect1.getX() > rect2.getX() + rect2.getWidth() || rect2.getX() > rect1.getX() + rect1.getWidth())
             return false;
 
         if(rect1.getY() < rect2.getY() + rect2.getHeight() || rect2.getY() < rect1.getY() + rect1.getHeight())
+            return false;
+
+        return true;
+    }
+
+    private boolean overlap(Building b1, Building b2) {
+        if(b1.xPos() > b2.xPos() + b2.width() || b2.xPos() > b1.xPos() + b1.width())
+            return false;
+
+        if(b1.yPos() < b2.yPos() + b2.height() || b2.yPos() < b1.yPos() + b1.height())
             return false;
 
         return true;

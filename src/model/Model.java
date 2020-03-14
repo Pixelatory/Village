@@ -1,5 +1,6 @@
 package model;
 
+import engine.GameContainer;
 import model.buildings.Building;
 import model.village.Village;
 
@@ -23,13 +24,18 @@ public class Model {
     private Building selectedNewConstruction = null;
     private Building selectedForUpgrade = null;
 
-    private int mouseX;
-    private int mouseY;
-    private int mouseClickedX;
-    private int mouseClickedY;
+    private int mouseX = 0;
+    private int mouseY = 0;
+    private int mouseClickedX = 0;
+    private int mouseClickedY = 0;
 
     public Model() {
         village = new Village();
+    }
+
+    public void update(GameContainer gc) {
+        mouseX = gc.getInput().getMouseX();
+        mouseY = gc.getInput().getMouseY();
     }
 
     /*
@@ -79,16 +85,8 @@ public class Model {
         return mouseX;
     }
 
-    public void setMouseX(int mouseX) {
-        this.mouseX = mouseX;
-    }
-
     public int getMouseY() {
         return mouseY;
-    }
-
-    public void setMouseY(int mouseY) {
-        this.mouseY = mouseY;
     }
 
     public int getMouseClickedX() {
