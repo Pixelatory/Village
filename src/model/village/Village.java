@@ -1,26 +1,22 @@
 package model.village;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import model.army.Combatant;
-import model.buildings.Building;
-import model.buildings.GoldMine;
-import model.buildings.IronMine;
-import model.buildings.LumberMill;
-import model.buildings.ProductionBuilding;
-import model.buildings.VillageHall;
 import engine.audio.Sound;
 import exceptions.NoStructureException;
 import exceptions.NotEnoughResourcesException;
+import model.army.Combatant;
+import model.buildings.*;
 import model.habitants.ProductionHabitant;
+import model.resources.Food;
 import model.resources.Gold;
 import model.resources.Iron;
 import model.resources.Wood;
 import model.statics.ProductionFrequency;
 import utility.TimerTaskExt;
+
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Village extends Guard implements Construct {
 	private ArrayList<Building> buildings;
@@ -28,6 +24,7 @@ public class Village extends Guard implements Construct {
 	private Gold gold;
 	private Iron iron;
 	private Wood wood;
+	private Food food;
 	private ArrayList<Combatant> combatees;
 	private boolean underAttack;
 	private boolean generatedVillage;
@@ -40,6 +37,7 @@ public class Village extends Guard implements Construct {
 		gold = new Gold();
 		wood = new Wood();
 		iron = new Iron();
+		food = new Food();
 		combatees = new ArrayList<>();
 		underAttack = false;
 	}
@@ -62,7 +60,7 @@ public class Village extends Guard implements Construct {
 			if(building instanceof ProductionBuilding) {
 				@SuppressWarnings("rawtypes")
 				ProductionBuilding tmp = (ProductionBuilding) building;
-				timer.scheduleAtFixedRate(new TimerTaskExt(tmp, gold, iron, wood) {
+				timer.scheduleAtFixedRate(new TimerTaskExt(tmp, gold, iron, wood, food) {
 					@Override
 					public void run() {
 						if(tmp instanceof GoldMine)
@@ -71,10 +69,12 @@ public class Village extends Guard implements Construct {
 							iron.increase(tmp.productionAmount());
 						else if (tmp instanceof LumberMill)
 							wood.increase(tmp.productionAmount());
+						else if (tmp instanceof Farm)
+							food.increase(tmp.productionAmount());
 					}
 				}, ProductionFrequency.time * 1000, ProductionFrequency.time * 1000);
 			}
-			
+
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
@@ -204,6 +204,8 @@ public class Village extends Guard implements Construct {
 	public int getWood() {
 		return wood.getQuantity();
 	}
+
+	public int getFood() { return food.getQuantity(); }
 	
 	public int popSize() {
 		return 0;

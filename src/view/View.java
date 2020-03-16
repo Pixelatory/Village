@@ -138,14 +138,15 @@ public final class View {
             }
         }
 
-        if(toolbar.isVisible() && trainingMode) {
+        if(toolbar.isVisible() && trainingMode) { // TRAINING MODE TOOLBAR
 
         }
 
-        r.setzDepth(Integer.MAX_VALUE);
+        r.setzDepth(Integer.MAX_VALUE); // DISPLAYING RESOURCE COUNTS
         r.drawText("Gold: " + village.getGold(), regularFont.getFontImage(), 0, 15, Color.WHITE);
         r.drawText("Iron: " + village.getIron(), regularFont.getFontImage(), 0, 30, Color.WHITE);
         r.drawText("Wood: " + village.getWood(), regularFont.getFontImage(), 0, 45, Color.WHITE);
+        r.drawText("Food: " + village.getFood(), regularFont.getFontImage(), 0, 60, Color.WHITE);
         r.setzDepth(Integer.MAX_VALUE - 1);
         r.drawRect(toolbar);
     }

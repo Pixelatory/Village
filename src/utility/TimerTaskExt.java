@@ -1,11 +1,12 @@
 package utility;
 
-import java.util.TimerTask;
-
 import model.buildings.ProductionBuilding;
+import model.resources.Food;
 import model.resources.Gold;
 import model.resources.Iron;
 import model.resources.Wood;
+
+import java.util.TimerTask;
 
 /**
  * Used for passing parameters into a timer task for when a building generates model.resources.<br>
@@ -16,7 +17,7 @@ import model.resources.Wood;
  */
 public abstract class TimerTaskExt extends TimerTask {
 	
-	public TimerTaskExt(ProductionBuilding building, Gold gold, Iron iron, Wood wood) {
+	public TimerTaskExt(ProductionBuilding building, Gold gold, Iron iron, Wood wood, Food food) {
 
 	}
 
