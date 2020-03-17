@@ -153,14 +153,12 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -186,8 +184,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
-		
+
 	}
 
 	/**

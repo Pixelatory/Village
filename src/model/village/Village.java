@@ -262,13 +262,13 @@ public class Village extends Guard implements Construct {
 	
 	@Override
 	public Duration guardDuration() {
-		// TODO Auto-generated method stub
+		// TODO Add guard duration
 		return null;
 	}
 	
 	@Override
 	public boolean isGuarded() {
-		// TODO Auto-generated method stub
+		// TODO Add is guarded
 		return false;
 	}
 }

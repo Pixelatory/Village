@@ -26,7 +26,6 @@ public final class Worker extends ProductionHabitant {
 
 	@Override
 	public int goldCost(int level) {
-		// TODO Auto-generated method stub
 		return GoldCosts.WORKER[level - 1];
 	}
 

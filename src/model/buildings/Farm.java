@@ -1,17 +1,11 @@
 package model.buildings;
 
-import java.awt.Color;
-
 import engine.renderPrimitives.Rectangle;
 import model.habitants.Worker;
-import model.statics.GoldCosts;
-import model.statics.IronCosts;
-import model.statics.MaxHealthPoints;
-import model.statics.MaxLevels;
-import model.statics.UpgradeTimes;
-import model.statics.WoodCosts;
-import model.statics.WorkerCapacities;
+import model.statics.*;
 import utility.Area;
+
+import java.awt.*;
 
 /**
  * Class representing a Farm.
@@ -85,7 +79,7 @@ public final class Farm extends FoodProduction {
 
 	@Override
 	public void takeDamage(float amount) {
-		// TODO Auto-generated method stub
-		
+		// TODO Take damage
+
 	}
 }

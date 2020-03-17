@@ -5,6 +5,7 @@ import engine.Renderer;
 import engine.audio.Sound;
 import engine.gfx.Font;
 import engine.gfx.Image;
+import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import model.Model;
 import model.army.Archer;
@@ -142,6 +143,7 @@ public final class View {
         if(toolbar.isVisible() && trainingMode) { // TRAINING MODE TOOLBAR
             r.setzDepth(Integer.MAX_VALUE);
             r.drawRect(archerSymbol);
+            r.drawCircle(new Circle(toolbar.getX() + 100,toolbar.getY()-50,25,Color.green));
         }
 
         r.setzDepth(Integer.MAX_VALUE); // DISPLAYING RESOURCE COUNTS

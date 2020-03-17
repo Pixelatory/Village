@@ -213,13 +213,67 @@ public class Renderer {
 		}
 	}
 
+	public void drawCircle(Circle circle) {
+		int radius = circle.getWidth();
+		for(int i=radius;i>0;i--) {
+			drawHollowCircle(new Circle(circle.getX(),circle.getY(),i,circle.getColour()));
+		}
+	}
+
 	/**
-	 * Draws a circle.
+	 * Draws a hollow circle, or only the circle's perimeter.
 	 *
 	 * @param circle Circle object
 	 */
-	public void drawCircle(Circle circle) {
-		
+	public void drawHollowCircle(Circle circle) {
+		if(!circle.isVisible())
+			return;
+
+		int offsetX = circle.getX();
+		int offsetY = circle.getY();
+		int radius = circle.getWidth();
+		Color colour = circle.getColour();
+		RenderCheck rc = new RenderCheck(offsetX, offsetY, radius, radius);
+		if(rc.isNoRender())
+			return;
+
+		int x = radius;
+		int y = 0;
+
+		if (radius > 0) {
+			setPixel(radius + offsetX, offsetY, colour);
+			setPixel(offsetX, -radius + offsetY, colour);
+			setPixel(offsetX, radius + offsetY, colour);
+			setPixel(-radius + offsetX, offsetY, colour);
+		}
+
+		int P = 1 - radius;
+
+		while(x > y) {
+			y++;
+
+			if(P <= 0)
+				P = P + 2 * y + 1;
+			else {
+				x--;
+				P = P + 2 * y - 2 * x + 1;
+			}
+
+			if(x < y)
+				break;
+
+			setPixel(x + offsetX, y + offsetY, colour);
+			setPixel(-x + offsetX, y + offsetY, colour);
+			setPixel(x + offsetX, -y + offsetY, colour);
+			setPixel(-x + offsetX, -y + offsetY, colour);
+
+			if(x != y) {
+				setPixel(y + offsetX, x + offsetY, colour);
+				setPixel(-y + offsetX, x + offsetY, colour);
+				setPixel(y + offsetX, -x + offsetY, colour);
+				setPixel(-y + offsetX, -x + offsetY, colour);
+			}
+		}
 	}
 	
 	/**

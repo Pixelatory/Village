@@ -21,9 +21,9 @@ public class Circle extends Shape {
      * @param height int value
      * @param colour Color object
      */
-    public Circle(int x, int y, int width, int height, Color colour) {
+    /*public Circle(int x, int y, int width, int height, Color colour) {
         super(x,y,width,height,colour);
-    }
+    }*/
 
     /**
      * Sets the parameter values in the respective instance variables.
@@ -34,7 +34,7 @@ public class Circle extends Shape {
      * @param colour Color object
      */
     public Circle(int x, int y, int radius, Color colour) {
-        super(x,y,radius,radius,colour);
+        super(x,y,radius * 2,radius * 2,colour);
     }
 
     /**

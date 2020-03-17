@@ -1,13 +1,9 @@
 package engine;
 
-import java.awt.BorderLayout;
-import java.awt.Canvas;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-
-import javax.swing.JFrame;
 
 /**
  * Creates a basic GUI JFrame window that allows for images and graphics to be drawn onto it.
