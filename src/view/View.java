@@ -7,6 +7,7 @@ import engine.gfx.Font;
 import engine.gfx.Image;
 import engine.renderPrimitives.Rectangle;
 import model.Model;
+import model.army.Archer;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
 import model.village.Village;
@@ -38,12 +39,12 @@ public final class View {
     private Rectangle ironMineSymbol = new IronMine(toolbar.getX() + 325, toolbar.getY() + 15).getRect();
     private Rectangle lumbermillSymbol = new LumberMill(toolbar.getX() + 400, toolbar.getY() + 15).getRect();
 
+    // Used for the train combatant mode toolbar
+    private Rectangle archerSymbol = new Archer(toolbar.getX(), toolbar.getY()).getRect();
+
     //Sounds
     private Sound clickSound = new Sound("/sounds/button_click.wav");
     private Sound mainMusic = new Sound("/music/main-theme.wav");
-
-    private int mouseX;
-    private int mouseY;
 
     public View() {
         toolbar.setVisible(true);
@@ -139,7 +140,8 @@ public final class View {
         }
 
         if(toolbar.isVisible() && trainingMode) { // TRAINING MODE TOOLBAR
-
+            r.setzDepth(Integer.MAX_VALUE);
+            r.drawRect(archerSymbol);
         }
 
         r.setzDepth(Integer.MAX_VALUE); // DISPLAYING RESOURCE COUNTS
@@ -187,88 +189,44 @@ public final class View {
         return buildIcon;
     }
 
-    public void setBuildIcon(Image buildIcon) {
-        this.buildIcon = buildIcon;
-    }
-
     public Image getUpgradeIcon() {
         return upgradeIcon;
-    }
-
-    public void setUpgradeIcon(Image upgradeIcon) {
-        this.upgradeIcon = upgradeIcon;
     }
 
     public Image getUpgradeTroopIcon() {
         return upgradeTroopIcon;
     }
 
-    public void setUpgradeTroopIcon(Image upgradeTroopIcon) {
-        this.upgradeTroopIcon = upgradeTroopIcon;
-    }
-
     public Image getTrainIcon() {
         return trainIcon;
-    }
-
-    public void setTrainIcon(Image trainIcon) {
-        this.trainIcon = trainIcon;
     }
 
     public Image getTrainCombatantIcon() {
         return trainCombatantIcon;
     }
 
-    public void setTrainCombatantIcon(Image trainCombatantIcon) {
-        this.trainCombatantIcon = trainCombatantIcon;
-    }
-
     public Rectangle getArcherTowerSymbol() {
         return archerTowerSymbol;
-    }
-
-    public void setArcherTowerSymbol(Rectangle archerTowerSymbol) {
-        this.archerTowerSymbol = archerTowerSymbol;
     }
 
     public Rectangle getCannonSymbol() {
         return cannonSymbol;
     }
 
-    public void setCannonSymbol(Rectangle cannonSymbol) {
-        this.cannonSymbol = cannonSymbol;
-    }
-
     public Rectangle getFarmSymbol() {
         return farmSymbol;
-    }
-
-    public void setFarmSymbol(Rectangle farmSymbol) {
-        this.farmSymbol = farmSymbol;
     }
 
     public Rectangle getGoldMineSymbol() {
         return goldMineSymbol;
     }
 
-    public void setGoldMineSymbol(Rectangle goldMineSymbol) {
-        this.goldMineSymbol = goldMineSymbol;
-    }
-
     public Rectangle getIronMineSymbol() {
         return ironMineSymbol;
     }
 
-    public void setIronMineSymbol(Rectangle ironMineSymbol) {
-        this.ironMineSymbol = ironMineSymbol;
-    }
-
     public Rectangle getLumbermillSymbol() {
         return lumbermillSymbol;
-    }
-
-    public void setLumbermillSymbol(Rectangle lumbermillSymbol) {
-        this.lumbermillSymbol = lumbermillSymbol;
     }
 
     public Sound getClickSound() {

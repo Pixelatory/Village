@@ -1,17 +1,18 @@
 package engine;
 
-import java.awt.Color;
-import java.awt.image.DataBufferInt;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import engine.gfx.Font;
 import engine.gfx.Image;
 import engine.gfx.ImageRequest;
 import engine.gfx.ImageTile;
+import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import utility.AlphaBlend;
+
+import java.awt.*;
+import java.awt.image.DataBufferInt;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Basic Renderer.<br>
@@ -210,6 +211,15 @@ public class Renderer {
 					setPixel(x + image.getX(), y + image.getY(), image.getP((x + tileX * image.getTileWidth()) + (y + tileY * image.getTileHeight()) * image.getWidth()));
 			}
 		}
+	}
+
+	/**
+	 * Draws a circle.
+	 *
+	 * @param circle Circle object
+	 */
+	public void drawCircle(Circle circle) {
+		
 	}
 	
 	/**

@@ -34,6 +34,7 @@ public final class Controller {
 		 * if(gc.getInput().isKeyDown(KeyEvent.VK_A)) {
 			sound.play();
 		}*/
+
         imageTileRate += dt * 50;
 
         if(imageTileRate > 23)
@@ -114,9 +115,9 @@ public final class Controller {
                 selectedForUpgrade.setYPos(mouseY - mouseClickedY);
             }
             return;
-        } // HOLDING LEFT CLICK ON BUILDING AFTER SELECTING IT
+        } // HOLDING LEFT CLICK (AND DRAGGING) ON BUILDING AFTER SELECTING IT
 
-        if(selectedNewConstruction != null) {
+        if(selectedNewConstruction != null) { // BUILD MODE, AND BUILDING WAS ALREADY SELECTED
             if(rightClickUp(gc)) { // RIGHT CLICK AFTER SELECTING BUILDING FOR CONSTRUCTION
                 model.setSelectedNewConstruction(null);
                 toolbar.setVisible(true);
@@ -190,7 +191,7 @@ public final class Controller {
                     }
                 }
             }
-        }
+        } // BUILD MODE, BUT NO BUILDING SELECTED
 
         if(toolbar.isVisible()
         && !upgradeMode
@@ -202,10 +203,13 @@ public final class Controller {
         } // CLICKING ON BUILD BUTTON
 
         if(toolbar.isVisible()
-                && trainingMode
-                && !upgradeMode
-                && !buildMode) {
-
+        && !trainingMode
+        && !upgradeMode
+        && !buildMode
+        && mouseInBounds(view.getTrainCombatantIcon())
+        && leftClickUp(gc)) {
+            model.setTrainingMode(true);
+            view.getClickSound().play();
         } // CLICKING ON TRAIN BUTTON
     }
 

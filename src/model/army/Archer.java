@@ -1,5 +1,6 @@
 package model.army;
 
+import engine.renderPrimitives.Rectangle;
 import model.statics.AttackRadius;
 import model.statics.AttackSpeed;
 import model.statics.AttackStrength;
@@ -10,6 +11,9 @@ import model.statics.MaxLevels;
 import model.statics.MovementSpeed;
 import model.statics.UpgradeTimes;
 import model.statics.WoodCosts;
+import utility.Area;
+
+import java.awt.*;
 
 /**
  * Class representing an Archer.
@@ -29,6 +33,8 @@ public class Archer extends Combatant {
 	 */
 	public Archer(int xPos, int yPos) {
 		super(xPos, yPos);
+		this.area = new Area(10,10);
+		this.rect = new Rectangle(pos.getX(), pos.getY(), area.getWidth(), area.getHeight(), new Color(138, 94, 0,255));
 	}
 
 	@Override
