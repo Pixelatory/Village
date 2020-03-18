@@ -9,6 +9,9 @@ import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import model.Model;
 import model.army.Archer;
+import model.army.Catapult;
+import model.army.Knight;
+import model.army.Soldier;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
 import model.village.Village;
@@ -41,7 +44,10 @@ public final class View {
     private Rectangle lumbermillSymbol = new LumberMill(toolbar.getX() + 400, toolbar.getY() + 15).getRect();
 
     // Used for the train combatant mode toolbar
-    private Rectangle archerSymbol = new Archer(toolbar.getX(), toolbar.getY()).getRect();
+    private Circle archerSymbol = new Archer(toolbar.getX() + 25, toolbar.getY() + 30).getCircle();
+    private Circle catapultSymbol = new Catapult(toolbar.getX() + 185, toolbar.getY() + 30).getCircle();
+    private Circle knightSymbol = new Knight(toolbar.getX() + 75, toolbar.getY() + 30).getCircle();
+    private Circle soldierSymbol = new Soldier(toolbar.getX() + 125, toolbar.getY() + 30).getCircle();
 
     //Sounds
     private Sound clickSound = new Sound("/sounds/button_click.wav");
@@ -142,8 +148,17 @@ public final class View {
 
         if(toolbar.isVisible() && trainingMode) { // TRAINING MODE TOOLBAR
             r.setzDepth(Integer.MAX_VALUE);
-            r.drawRect(archerSymbol);
-            r.drawCircle(new Circle(toolbar.getX() + 100,toolbar.getY()-50,25,Color.green));
+            r.drawText("Archer", smallFont.getFontImage(), archerSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
+            r.drawCircle(archerSymbol);
+
+            r.drawText("Knight", smallFont.getFontImage(), knightSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
+            r.drawCircle(knightSymbol);
+
+            r.drawText("Soldier", smallFont.getFontImage(), soldierSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
+            r.drawCircle(soldierSymbol);
+
+            r.drawText("Catapult", smallFont.getFontImage(), catapultSymbol.getX() - 28, toolbar.getY() + 2, Color.white);
+            r.drawCircle(catapultSymbol);
         }
 
         r.setzDepth(Integer.MAX_VALUE); // DISPLAYING RESOURCE COUNTS
@@ -229,6 +244,22 @@ public final class View {
 
     public Rectangle getLumbermillSymbol() {
         return lumbermillSymbol;
+    }
+
+    public Circle getArcherSymbol() {
+        return archerSymbol;
+    }
+
+    public Circle getCatapultSymbol() {
+        return catapultSymbol;
+    }
+
+    public Circle getKnightSymbol() {
+        return knightSymbol;
+    }
+
+    public Circle getSoldierSymbol() {
+        return soldierSymbol;
     }
 
     public Sound getClickSound() {

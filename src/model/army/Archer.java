@@ -1,5 +1,6 @@
 package model.army;
 
+import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import model.statics.AttackRadius;
 import model.statics.AttackSpeed;
@@ -33,8 +34,8 @@ public class Archer extends Combatant {
 	 */
 	public Archer(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(10,10);
-		this.rect = new Rectangle(pos.getX(), pos.getY(), area.getWidth(), area.getHeight(), new Color(138, 94, 0,255));
+		this.area = new Area(2,2);
+		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(197, 139, 0,255));
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package controller;
 
 import engine.GameContainer;
 import engine.gfx.Image;
+import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import model.Model;
 import model.buildings.*;
@@ -193,6 +194,15 @@ public final class Controller {
             }
         } // BUILD MODE, BUT NO BUILDING SELECTED
 
+        if(trainingMode
+        && !upgradeMode
+        && !buildMode
+        && leftClickUp(gc)) {
+            if(mouseInBounds(view.getArcherSymbol())) {
+                System.out.println("make an archer");
+            }
+        }
+
         if(toolbar.isVisible()
         && !upgradeMode
         && !trainingMode
@@ -200,6 +210,7 @@ public final class Controller {
         && leftClickUp(gc)) {
             view.getClickSound().play();
             model.setBuildMode(true);
+            return;
         } // CLICKING ON BUILD BUTTON
 
         if(toolbar.isVisible()
@@ -210,6 +221,7 @@ public final class Controller {
         && leftClickUp(gc)) {
             model.setTrainingMode(true);
             view.getClickSound().play();
+            return;
         } // CLICKING ON TRAIN BUTTON
     }
 
@@ -231,6 +243,12 @@ public final class Controller {
     private boolean mouseInBounds(Rectangle rect) {
         if(rect.isVisible())
             return mouseInBounds(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+        return false;
+    }
+
+    private boolean mouseInBounds(Circle circle) {
+        if((Math.pow(mouseX - circle.getX(), 2) + Math.pow(mouseY - circle.getY(), 2)) <= Math.pow(circle.getWidth(), 2))
+            return true;
         return false;
     }
 

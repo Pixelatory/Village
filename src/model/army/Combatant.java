@@ -1,6 +1,6 @@
 package model.army;
 
-import engine.renderPrimitives.Rectangle;
+import engine.renderPrimitives.Circle;
 import model.attack.CombatantDamager;
 import model.buildings.Building;
 import utility.Area;
@@ -23,7 +23,7 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 	protected Position pos;
 	protected int level = 1;
 	protected Area area;
-	protected Rectangle rect;
+	protected Circle circle;
 	protected boolean isUpgrading = false;
 	protected boolean canAttack = true;
 	
@@ -41,8 +41,8 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 		this.pos = new Position(xPos,yPos);
 	}
 
-	public Rectangle getRect() {
-		return this.rect;
+	public Circle getCircle() {
+		return this.circle;
 	}
 	
 	public abstract int upgradeTime(int level);

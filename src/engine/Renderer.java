@@ -213,9 +213,14 @@ public class Renderer {
 		}
 	}
 
+	/**
+	 * Draws a filled circle.
+	 *
+	 * @param circle Circle object
+	 */
 	public void drawCircle(Circle circle) {
 		int radius = circle.getWidth();
-		for(int i=radius;i>0;i--) {
+		for(int i=radius;i>=0;i--) {
 			drawHollowCircle(new Circle(circle.getX(),circle.getY(),i,circle.getColour()));
 		}
 	}

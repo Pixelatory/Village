@@ -1,5 +1,6 @@
 package model.army;
 
+import engine.renderPrimitives.Circle;
 import model.statics.AttackRadius;
 import model.statics.AttackSpeed;
 import model.statics.AttackStrength;
@@ -10,6 +11,9 @@ import model.statics.MaxLevels;
 import model.statics.MovementSpeed;
 import model.statics.UpgradeTimes;
 import model.statics.WoodCosts;
+import utility.Area;
+
+import java.awt.*;
 
 /**
  * Class representing a Soldier.
@@ -29,6 +33,8 @@ public class Soldier extends Combatant {
 	 */
 	public Soldier(int xPos, int yPos) {
 		super(xPos, yPos);
+		this.area = new Area(2,2);
+		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(145, 0, 197,255));
 	}
 
 	@Override
