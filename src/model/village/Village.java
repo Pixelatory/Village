@@ -1,8 +1,6 @@
 package model.village;
 
 import engine.audio.Sound;
-import exceptions.NoStructureException;
-import exceptions.NotEnoughResourcesException;
 import model.army.Combatant;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
@@ -86,11 +84,26 @@ public class Village extends Guard implements Construct {
 	} // Creating a new construction project (new building)
 	
 	public boolean canTrain(Combatant combatant) {
-		return false;
+		return (combatant.ironCost(combatant.level()) <= getIron()
+				&& combatant.goldCost(combatant.level()) <= getGold()
+				&& combatant.woodCost(combatant.level()) <= getWood());
 	}
-	public void newIndividual(Combatant combatant) throws NotEnoughResourcesException, NoStructureException {
-		
-	} // Creating a new individual in the model.village (new habitant)
+
+	public void newIndividual(Combatant combatant) {
+		if (canTrain(combatant)) {
+			new Sound("/sounds/building_construct.wav").play();
+			iron.decrease(combatant.ironCost(combatant.level()));
+			gold.decrease(combatant.goldCost(combatant.level()));
+			wood.decrease(combatant.woodCost(combatant.level()));
+			timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					new Sound("/sounds/building_finished.wav").play();
+					combatees.add(combatant);
+				}
+			}, combatant.upgradeTime(combatant.level())*1000);
+		}
+	} // Creating a new individual in the village (new combatant)
 	
 	public boolean canTrainIndividual(ProductionBuilding<ProductionHabitant> building) {
 		ProductionHabitant h;
@@ -98,14 +111,13 @@ public class Village extends Guard implements Construct {
 		if(building.canAddWorker()) {
 			building.addWorker();
 			h = building.removeWorker(building.numOfWorkers() - 1);
-		} else {
+		} else
 			return false;
-		}
 
-			return (building.canAddWorker() 
-		&& !building.isTraining() 
+		return (building.canAddWorker()
+		&& !building.isTraining()
 		&& !building.isUpgrading()
-		&& h.goldCost(h.level()) <= gold.getQuantity());
+		&& h.goldCost(h.level()) <= getGold());
 	}
 	
 	public void trainIndividual(ProductionBuilding<ProductionHabitant> building) {

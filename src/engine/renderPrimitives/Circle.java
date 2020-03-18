@@ -8,23 +8,6 @@ import java.awt.Color;
  * @author 6177000
  */
 public class Circle extends Shape {
-    private int x,y,width,height;
-    private Color colour;
-    private boolean isVisible = true;
-
-    /**
-     * Sets the parameter values in the respective instance variables.
-     *
-     * @param x int value
-     * @param y int value
-     * @param width int value
-     * @param height int value
-     * @param colour Color object
-     */
-    /*public Circle(int x, int y, int width, int height, Color colour) {
-        super(x,y,width,height,colour);
-    }*/
-
     /**
      * Sets the parameter values in the respective instance variables.
      *
@@ -34,7 +17,7 @@ public class Circle extends Shape {
      * @param colour Color object
      */
     public Circle(int x, int y, int radius, Color colour) {
-        super(x,y,radius * 2,radius * 2,colour);
+        super(x,y,radius,colour);
     }
 
     /**
@@ -43,6 +26,6 @@ public class Circle extends Shape {
      * @param circle Circle object
      */
     public Circle(Circle circle) {
-        super(circle.getX(),circle.getY(),circle.getWidth(),circle.getHeight(),circle.getColour());
+        super(circle.getX(),circle.getY(),circle.getRadius(),circle.getColour());
     }
 }

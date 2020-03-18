@@ -8,7 +8,7 @@ import java.awt.*;
  * @author 6177000
  */
 class Shape {
-    private int x,y,width,height;
+    private int x,y,width,height,radius;
     private Color colour;
     private boolean isVisible = true;
 
@@ -17,6 +17,13 @@ class Shape {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.colour = colour;
+    }
+
+    public Shape(int x, int y, int radius, Color colour) {
+        this.x = x;
+        this.y = y;
+        this.radius = radius;
         this.colour = colour;
     }
 
@@ -48,12 +55,25 @@ class Shape {
     }
 
     /**
+     * Returns the radius of the shape (mainly used for circles).
+     *
+     * @return int value
+     */
+    public int getRadius() {
+        if(radius > 0)
+            return radius;
+        return 0;
+    }
+
+    /**
      * Returns the width of the shape.
      *
      * @return int value
      */
     public int getWidth() {
-        return width;
+        if(width > 0)
+            return width;
+        return 0;
     }
 
     /**
@@ -62,7 +82,9 @@ class Shape {
      * @return int value
      */
     public int getHeight() {
-        return height;
+        if(height > 0)
+            return height;
+        return 0;
     }
 
     /**

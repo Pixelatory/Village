@@ -113,7 +113,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	/**
 	 * Given a buttoncode, returns true if it isn't down in the current frame, but it was down in the previous one.
 	 * 
-	 * @param keyCode int value
+	 * @param buttonCode int value
 	 * @return boolean value
 	 */
 	public boolean isButtonUp(int buttonCode) {
@@ -137,14 +137,14 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-		mouseX = (int)(e.getX() / gc.getScale());
-		mouseY = (int)(e.getY() / gc.getScale());
+		mouseX = (int)(e.getX() / GameContainer.getScale());
+		mouseY = (int)(e.getY() / GameContainer.getScale());
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
-		mouseX = (int)(e.getX() / gc.getScale());
-		mouseY = (int)(e.getY() / gc.getScale());
+		mouseX = (int)(e.getX() / GameContainer.getScale());
+		mouseY = (int)(e.getY() / GameContainer.getScale());
 	}
 
 	@Override

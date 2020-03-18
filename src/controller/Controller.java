@@ -5,6 +5,10 @@ import engine.gfx.Image;
 import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import model.Model;
+import model.army.Archer;
+import model.army.Catapult;
+import model.army.Knight;
+import model.army.Soldier;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
 import view.View;
@@ -199,7 +203,23 @@ public final class Controller {
         && !buildMode
         && leftClickUp(gc)) {
             if(mouseInBounds(view.getArcherSymbol())) {
-                System.out.println("make an archer");
+                model.getVillage().newIndividual(new Archer(0,0));
+                return;
+            }
+
+            if(mouseInBounds(view.getSoldierSymbol())) {
+                model.getVillage().newIndividual(new Soldier(0,0));
+                return;
+            }
+
+            if(mouseInBounds(view.getCatapultSymbol())) {
+                model.getVillage().newIndividual(new Catapult(0,0));
+                return;
+            }
+
+            if(mouseInBounds(view.getKnightSymbol())) {
+                model.getVillage().newIndividual(new Knight(0,0));
+                return;
             }
         }
 
@@ -223,6 +243,8 @@ public final class Controller {
             view.getClickSound().play();
             return;
         } // CLICKING ON TRAIN BUTTON
+
+        System.out.println(mouseX + " " + mouseY);
     }
 
     private boolean mouseInBounds(int x, int y, int width, int height) {

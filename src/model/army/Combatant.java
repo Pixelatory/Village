@@ -26,6 +26,7 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 	protected Circle circle;
 	protected boolean isUpgrading = false;
 	protected boolean canAttack = true;
+	protected String name;
 	
 	/**
 	 * Sets the initial hp and position values.
@@ -93,5 +94,9 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 	
 	public Position getPosition() {
 		return pos;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

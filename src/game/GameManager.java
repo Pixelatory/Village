@@ -22,8 +22,8 @@ public class GameManager extends AbstractGame {
 	// Used for combatant training bar
 	
 	public GameManager() {
-		this.controller = new Controller();
 		this.model = new Model();
+		this.controller = new Controller();
 		this.view = new View();
 	}
 	
@@ -32,7 +32,6 @@ public class GameManager extends AbstractGame {
 	/**
 	 * Every frame, update what's going on.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void update(GameContainer gc, float dt) {
 		model.update(gc);

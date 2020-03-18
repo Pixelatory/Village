@@ -35,6 +35,7 @@ public class Catapult extends Combatant {
 		super(xPos, yPos);
 		this.area = new Area(3,3);
 		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(197, 60, 0,255));
+		this.name = "Catapult";
 	}
 
 	@Override

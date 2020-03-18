@@ -28,7 +28,7 @@ public class Window {
 	public Window(GameContainer gc) {
 		this.image = new BufferedImage(GameContainer.getWidth(), GameContainer.getHeight(), BufferedImage.TYPE_INT_RGB);
 		this.canvas = new Canvas();
-		Dimension dim = new Dimension((int) (GameContainer.getWidth() * gc.getScale()), (int) (GameContainer.getHeight() * gc.getScale()));
+		Dimension dim = new Dimension((int) (GameContainer.getWidth() * GameContainer.getScale()), (int) (GameContainer.getHeight() * GameContainer.getScale()));
 		canvas.setPreferredSize(dim);
 		canvas.setMaximumSize(dim);
 		canvas.setMinimumSize(dim);

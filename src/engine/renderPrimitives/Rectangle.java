@@ -8,7 +8,6 @@ import java.awt.Color;
  * @author 6177000
  */
 public class Rectangle extends Shape {
-
 	/**
 	 * Sets the parameter values in the respective instance variables.
 	 * 

@@ -11,8 +11,6 @@ import utility.AlphaBlend;
 import java.awt.*;
 import java.awt.image.DataBufferInt;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 /**
  * Basic Renderer.<br>
@@ -66,16 +64,12 @@ public class Renderer {
 		processing = true;
 		
 		// Anonymous class that will sort ImageRequest objects by their z value
-		Collections.sort(imageQueue, new Comparator<ImageRequest> () {
-			@Override
-			public int compare(ImageRequest ir1, ImageRequest ir2) {
-				if(ir1.getzDepth() < ir2.getzDepth())
-					return -1;
-				else if (ir1.getzDepth() > ir2.getzDepth())
-					return 1;
-				return 0;
-			}
-			
+		imageQueue.sort((ir1, ir2) -> {
+			if (ir1.getzDepth() < ir2.getzDepth())
+				return -1;
+			else if (ir1.getzDepth() > ir2.getzDepth())
+				return 1;
+			return 0;
 		});
 		
 		for(ImageRequest ir : imageQueue) {
@@ -128,7 +122,7 @@ public class Renderer {
 	 * 
 	 * @param x int value
 	 * @param y int value
-	 * @param value Colour object
+	 * @param color Colour object
 	 */
 	public void setPixel(int x, int y, Color color) {
 		setPixel(x,y,color.getRGB());
@@ -219,7 +213,7 @@ public class Renderer {
 	 * @param circle Circle object
 	 */
 	public void drawCircle(Circle circle) {
-		int radius = circle.getWidth();
+		int radius = circle.getRadius();
 		for(int i=radius;i>=0;i--) {
 			drawHollowCircle(new Circle(circle.getX(),circle.getY(),i,circle.getColour()));
 		}
@@ -236,7 +230,7 @@ public class Renderer {
 
 		int offsetX = circle.getX();
 		int offsetY = circle.getY();
-		int radius = circle.getWidth();
+		int radius = circle.getRadius();
 		Color colour = circle.getColour();
 		RenderCheck rc = new RenderCheck(offsetX, offsetY, radius, radius);
 		if(rc.isNoRender())
@@ -245,11 +239,13 @@ public class Renderer {
 		int x = radius;
 		int y = 0;
 
+		setPixel(offsetX,offsetY, colour);
+
 		if (radius > 0) {
 			setPixel(radius + offsetX, offsetY, colour);
-			setPixel(offsetX, -radius + offsetY, colour);
+			setPixel(offsetX, offsetY - radius, colour);
 			setPixel(offsetX, radius + offsetY, colour);
-			setPixel(-radius + offsetX, offsetY, colour);
+			setPixel(offsetX - radius, offsetY, colour);
 		}
 
 		int P = 1 - radius;
@@ -316,8 +312,8 @@ public class Renderer {
 	private class RenderCheck {
 		private int newX = 0;
 		private int newY = 0;
-		private int newWidth = 0;
-		private int newHeight = 0;
+		private int newWidth;
+		private int newHeight;
 		private boolean noRender = false;
 		
 		RenderCheck(int offsetX, int offsetY, int width, int height) {

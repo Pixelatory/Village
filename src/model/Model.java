@@ -1,8 +1,11 @@
 package model;
 
 import engine.GameContainer;
+import model.army.Combatant;
 import model.buildings.Building;
 import model.village.Village;
+
+import java.util.ArrayList;
 
 /**
  * Contains the model of the game.<br>
@@ -64,6 +67,8 @@ public class Model {
     public void setVillage(Village village) {
         this.village = village;
     }
+
+    public ArrayList<Combatant> getCombatees() {return village.getCombatees();}
 
     public Building getSelectedNewConstruction() {
         return selectedNewConstruction;

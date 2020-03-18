@@ -25,7 +25,7 @@ public class GameContainer implements Runnable {
 	private boolean running = false;
 	private final double FPS_CAP = 1.0/60.0;
 	private static int width = 640, height = 420;
-	private float scale = 2f;
+	private static float scale = 2f;
 	private String title = "Village Game";
 	
 	/**
@@ -161,7 +161,7 @@ public class GameContainer implements Runnable {
 	 * 
 	 * @return float value
 	 */
-	public float getScale() {
+	public static float getScale() {
 		return scale;
 	}
 

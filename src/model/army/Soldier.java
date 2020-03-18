@@ -35,6 +35,7 @@ public class Soldier extends Combatant {
 		super(xPos, yPos);
 		this.area = new Area(2,2);
 		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(145, 0, 197,255));
+		this.name = "Soldier";
 	}
 
 	@Override

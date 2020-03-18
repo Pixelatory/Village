@@ -1,17 +1,7 @@
 package model.army;
 
 import engine.renderPrimitives.Circle;
-import engine.renderPrimitives.Rectangle;
-import model.statics.AttackRadius;
-import model.statics.AttackSpeed;
-import model.statics.AttackStrength;
-import model.statics.GoldCosts;
-import model.statics.IronCosts;
-import model.statics.MaxHealthPoints;
-import model.statics.MaxLevels;
-import model.statics.MovementSpeed;
-import model.statics.UpgradeTimes;
-import model.statics.WoodCosts;
+import model.statics.*;
 import utility.Area;
 
 import java.awt.*;
@@ -35,7 +25,8 @@ public class Archer extends Combatant {
 	public Archer(int xPos, int yPos) {
 		super(xPos, yPos);
 		this.area = new Area(2,2);
-		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(197, 139, 0,255));
+		this.circle = new Circle(pos.getX(),pos.getY(),area.getWidth(),new Color(197, 139, 0,255));
+		this.name = "Archer";
 	}
 
 	@Override

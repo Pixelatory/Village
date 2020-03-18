@@ -8,15 +8,13 @@ import engine.gfx.Image;
 import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import model.Model;
-import model.army.Archer;
-import model.army.Catapult;
-import model.army.Knight;
-import model.army.Soldier;
+import model.army.*;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
 import model.village.Village;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public final class View {
     // Fonts
@@ -30,6 +28,7 @@ public final class View {
     private Image backgroundImage = new Image("/grass.png",0,0);
     private Image buildIcon = new Image("/icons/build.png", toolbar.getX() + 5, toolbar.getY() + 16);
     private Image upgradeIcon = new Image("/icons/upgrade.png", toolbar.getX() + 5, toolbar.getY() + 16);
+    private Image attackIcon = new Image("/icons/attack.png", GameContainer.getWidth() - 50, toolbar.getY() + 16);
 
     private Image upgradeTroopIcon = new Image("/icons/upgradeTroop.png", toolbar.getX() + 145, toolbar.getY() + 16);
     private Image trainIcon = new Image("/icons/train.png",toolbar.getX() + 75, toolbar.getY() + 16);
@@ -53,8 +52,10 @@ public final class View {
     private Sound clickSound = new Sound("/sounds/button_click.wav");
     private Sound mainMusic = new Sound("/music/main-theme.wav");
 
+
     public View() {
         toolbar.setVisible(true);
+        setMainMusic("/music/main-theme.wav");
         mainMusic.loop();
     }
 
@@ -87,8 +88,19 @@ public final class View {
             r.setzDepth(Integer.MAX_VALUE);
             r.drawText("Build", smallFont.getFontImage(), buildIcon.getX() - 2, toolbar.getY() + 1, Color.white);
             r.drawImage(buildIcon);
+
             r.drawText("Train Army", smallFont.getFontImage(), trainCombatantIcon.getX() - 18, toolbar.getY() + 1, Color.white);
             r.drawImage(trainCombatantIcon);
+
+            r.drawText("Archer: " + countCombatants(m.getCombatees(), "Archer"), smallFont.getFontImage(), getTrainCombatantIcon().getX() + 75, toolbar.getY() + 1, Color.white);
+            r.drawText("Knight: " + countCombatants(m.getCombatees(), "Knight"), smallFont.getFontImage(), getTrainCombatantIcon().getX() + 75, toolbar.getY() + 12, Color.white);
+            r.drawText("Soldier: " + countCombatants(m.getCombatees(), "Soldier"), smallFont.getFontImage(), getTrainCombatantIcon().getX() + 75, toolbar.getY() + 23, Color.white);
+            r.drawText("Catapult: " + countCombatants(m.getCombatees(), "Catapult"), smallFont.getFontImage(), getTrainCombatantIcon().getX() + 75, toolbar.getY() + 34, Color.white);
+
+            if(m.getCombatees().size() >= 0) {
+                r.drawText("Attack", smallFont.getFontImage(), attackIcon.getX() - 1, toolbar.getY() + 1, Color.white);
+                r.drawImage(attackIcon);
+            }
         }
 
         if(toolbar.isVisible() && buildMode) { // BUILD MODE TOOLBAR
@@ -149,7 +161,7 @@ public final class View {
         if(toolbar.isVisible() && trainingMode) { // TRAINING MODE TOOLBAR
             r.setzDepth(Integer.MAX_VALUE);
             r.drawText("Archer", smallFont.getFontImage(), archerSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
-            r.drawCircle(archerSymbol);
+            r.drawHollowCircle(archerSymbol);
 
             r.drawText("Knight", smallFont.getFontImage(), knightSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
             r.drawCircle(knightSymbol);
@@ -168,6 +180,15 @@ public final class View {
         r.drawText("Food: " + village.getFood(), regularFont.getFontImage(), 0, 60, Color.WHITE);
         r.setzDepth(Integer.MAX_VALUE - 1);
         r.drawRect(toolbar);
+    }
+
+    private int countCombatants(ArrayList<Combatant> combatees, String name) {
+        int count = 0;
+        for (Combatant combatee : combatees) {
+            if (combatee.getName().equals(name))
+                count++;
+        }
+        return count;
     }
 
     public Font getRegularFont() {
@@ -266,15 +287,11 @@ public final class View {
         return clickSound;
     }
 
-    public void setClickSound(Sound clickSound) {
-        this.clickSound = clickSound;
-    }
-
     public Sound getMainMusic() {
         return mainMusic;
     }
 
-    public void setMainMusic(Sound mainMusic) {
-        this.mainMusic = mainMusic;
+    public void setMainMusic(String path) {
+        this.mainMusic = new Sound(path);
     }
 }
