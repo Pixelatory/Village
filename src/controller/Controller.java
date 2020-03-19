@@ -224,6 +224,7 @@ public final class Controller {
         }
 
         if(toolbar.isVisible()
+        && !buildMode
         && !upgradeMode
         && !trainingMode
         && mouseInBounds(view.getBuildIcon())
@@ -239,8 +240,8 @@ public final class Controller {
         && !buildMode
         && mouseInBounds(view.getTrainCombatantIcon())
         && leftClickUp(gc)) {
-            model.setTrainingMode(true);
             view.getClickSound().play();
+            model.setTrainingMode(true);
             return;
         } // CLICKING ON TRAIN BUTTON
 
@@ -269,7 +270,7 @@ public final class Controller {
     }
 
     private boolean mouseInBounds(Circle circle) {
-        if((Math.pow(mouseX - circle.getX(), 2) + Math.pow(mouseY - circle.getY(), 2)) <= Math.pow(circle.getRadius(), 2))
+        if(Math.sqrt(Math.pow(mouseX - circle.getX(), 2) + Math.pow(mouseY - circle.getY(), 2)) <= circle.getRadius())
             return true;
         return false;
     }
