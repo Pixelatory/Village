@@ -16,8 +16,8 @@ import model.village.Village;
  *
  */
 public abstract class Attack implements Generator<Village> {
-	private ArrayList<Combatant> combatants;
-	private Village attackedVillage;
+	private Village attackingVillage;
+	private Village defendingVillage;
 	private int attackScore;
 	private int lootScore;
 	private int lootGained;

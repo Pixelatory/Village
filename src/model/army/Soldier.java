@@ -33,7 +33,7 @@ public class Soldier extends Combatant {
 	 */
 	public Soldier(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(2,2);
+		this.area = new Area(5,5);
 		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(145, 0, 197,255));
 		this.name = "Soldier";
 	}

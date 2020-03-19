@@ -33,7 +33,7 @@ public class Catapult extends Combatant {
 	 */
 	public Catapult(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(3,3);
+		this.area = new Area(7,7);
 		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(197, 60, 0,255));
 		this.name = "Catapult";
 	}

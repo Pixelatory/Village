@@ -33,7 +33,7 @@ public class Knight extends Combatant {
 	 */
 	public Knight(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(2,2);
+		this.area = new Area(5,5);
 		this.circle = new Circle(xPos,yPos,area.getWidth(),new Color(0, 197, 119,255));
 		this.name = "Knight";
 	}

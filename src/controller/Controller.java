@@ -269,7 +269,7 @@ public final class Controller {
     }
 
     private boolean mouseInBounds(Circle circle) {
-        if((Math.pow(mouseX - circle.getX(), 2) + Math.pow(mouseY - circle.getY(), 2)) <= Math.pow(circle.getWidth(), 2))
+        if((Math.pow(mouseX - circle.getX(), 2) + Math.pow(mouseY - circle.getY(), 2)) <= Math.pow(circle.getRadius(), 2))
             return true;
         return false;
     }

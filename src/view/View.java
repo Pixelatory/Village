@@ -97,7 +97,7 @@ public final class View {
             r.drawText("Soldier: " + countCombatants(m.getCombatees(), "Soldier"), smallFont.getFontImage(), getTrainCombatantIcon().getX() + 75, toolbar.getY() + 23, Color.white);
             r.drawText("Catapult: " + countCombatants(m.getCombatees(), "Catapult"), smallFont.getFontImage(), getTrainCombatantIcon().getX() + 75, toolbar.getY() + 34, Color.white);
 
-            if(m.getCombatees().size() >= 0) {
+            if(m.getCombatees().size() > 0) {
                 r.drawText("Attack", smallFont.getFontImage(), attackIcon.getX() - 1, toolbar.getY() + 1, Color.white);
                 r.drawImage(attackIcon);
             }
@@ -161,7 +161,7 @@ public final class View {
         if(toolbar.isVisible() && trainingMode) { // TRAINING MODE TOOLBAR
             r.setzDepth(Integer.MAX_VALUE);
             r.drawText("Archer", smallFont.getFontImage(), archerSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
-            r.drawHollowCircle(archerSymbol);
+            r.drawCircle(archerSymbol);
 
             r.drawText("Knight", smallFont.getFontImage(), knightSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
             r.drawCircle(knightSymbol);

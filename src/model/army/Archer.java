@@ -24,7 +24,7 @@ public class Archer extends Combatant {
 	 */
 	public Archer(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(2,2);
+		this.area = new Area(5,5);
 		this.circle = new Circle(pos.getX(),pos.getY(),area.getWidth(),new Color(197, 139, 0,255));
 		this.name = "Archer";
 	}
