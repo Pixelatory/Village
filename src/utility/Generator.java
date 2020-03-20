@@ -1,4 +1,4 @@
-package model.generate;
+package utility;
 
 /**
  * <b>NOT IMPLEMENTED</b>

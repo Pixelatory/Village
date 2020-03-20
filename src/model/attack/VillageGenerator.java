@@ -1,6 +1,7 @@
-package model.generate;
+package model.attack;
 
 import model.village.Village;
+import utility.Generator;
 
 /**
  * <b>NOT IMPLEMENTED</b>

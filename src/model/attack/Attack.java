@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import model.army.Combatant;
 import exceptions.InvalidPlacementException;
-import model.generate.Generator;
+import utility.Generator;
 import model.village.Village;
 
 /**
@@ -15,7 +15,7 @@ import model.village.Village;
  * @author 6177000
  *
  */
-public abstract class Attack implements Generator<Village> {
+public class Attack implements Generator<Village> {
 	private Village attackingVillage;
 	private Village defendingVillage;
 	private int attackScore;
@@ -23,6 +23,14 @@ public abstract class Attack implements Generator<Village> {
 	private int lootGained;
 	
 	public abstract ArrayList<Combatant> generateComparedTo(Village village);
+
+	public void setAttackingVillage(Village village) {
+		this.attackingVillage = village;
+	}
+
+	public void setDefendingVillage(Village village) {
+		this.defendingVillage = village;
+	}
 	
 	public abstract void placeCombatant(Combatant combatee, int x, int y) throws InvalidPlacementException;
 	public abstract int attackScore();

@@ -9,10 +9,12 @@ import model.resources.Gold;
 import model.resources.Iron;
 import model.resources.Wood;
 import model.statics.ProductionFrequency;
+import utility.OnQueue;
 import utility.TimerTaskExt;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -25,6 +27,7 @@ public class Village extends Guard implements Construct {
 	private Food food;
 	private ArrayList<Combatant> combatees;
 	private boolean underAttack;
+	private int combatantTimer = 0;
 	private boolean generatedVillage;
 	Timer timer = new Timer();
 	
@@ -95,13 +98,14 @@ public class Village extends Guard implements Construct {
 			iron.decrease(combatant.ironCost(combatant.level()));
 			gold.decrease(combatant.goldCost(combatant.level()));
 			wood.decrease(combatant.woodCost(combatant.level()));
+			combatantTimer += combatant.upgradeTime(combatant.level()) * 1000;
 			timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
 					new Sound("/sounds/building_finished.wav").play();
 					combatees.add(combatant);
 				}
-			}, combatant.upgradeTime(combatant.level())*1000);
+			}, combatantTimer);
 		}
 	} // Creating a new individual in the village (new combatant)
 	

@@ -1,10 +1,13 @@
 package model.buildings;
 
 import engine.renderPrimitives.Rectangle;
+import org.w3c.dom.css.Rect;
 import utility.Area;
 import utility.Position;
 import model.village.Attackable;
 import model.village.Upgradable;
+
+import java.awt.*;
 
 /**
  * General abstract class that encompasses everything a building should do/have.
@@ -20,6 +23,7 @@ public abstract class Building implements Upgradable, Attackable {
 	protected Rectangle rect;
 	protected Rectangle upgradingRect;
 	protected boolean isUpgrading = false;
+	protected boolean isDestroyed = false;
 	
 	/**
 	 * A function which sets the initial hp value, and position of the newly created Building.
@@ -29,6 +33,14 @@ public abstract class Building implements Upgradable, Attackable {
 	public Building(int xPos, int yPos) {
 		this.hp = maxHP();
 		this.pos = new Position(xPos,yPos);
+	}
+
+	public void setDestroyed(boolean value) {
+		this.isDestroyed = value;
+	}
+
+	public boolean isDestroyed() {
+		return this.isDestroyed;
 	}
 	
 	/**
@@ -131,10 +143,21 @@ public abstract class Building implements Upgradable, Attackable {
 	 * @see engine.renderPrimitives.Rectangle
 	 */
 	public Rectangle getRect() {
-		if(!isUpgrading())
+		if(!isUpgrading() && !isDestroyed())
 			return rect;
-		else
+		else if (!isUpgrading() && isDestroyed()) {
+			Rectangle tmp = rect;
+			tmp.setColour(tmp.getColour().darker());
+			return new Rectangle(tmp);
+		} else if (isUpgrading() && !isDestroyed())
 			return upgradingRect;
+		else if (isUpgrading() && isDestroyed()) {
+			Rectangle tmp = upgradingRect;
+			tmp.setColour(tmp.getColour().darker());
+			return new Rectangle(tmp);
+		}
+
+		return new Rectangle(0,0,10,10, Color.white);
 	}
 	
 	/**
