@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import model.army.Combatant;
 import exceptions.InvalidPlacementException;
+import model.buildings.Building;
 import utility.Generator;
 import model.village.Village;
+import utility.ai.genetic.Evolution;
 
 /**
  * <b>UNIMPLEMENTED</b>
@@ -21,8 +23,16 @@ public class Attack implements Generator<Village> {
 	private int attackScore;
 	private int lootScore;
 	private int lootGained;
-	
-	public abstract ArrayList<Combatant> generateComparedTo(Village village);
+
+	/**
+	 * Generating a list of combatants compared to another villages buildings.
+	 *
+	 * @param village Village object
+	 * @return arraylist of combatants
+	 */
+	public ArrayList<Combatant> generateComparedTo(Village village) {
+		return null;
+	}
 
 	public void setAttackingVillage(Village village) {
 		this.attackingVillage = village;
