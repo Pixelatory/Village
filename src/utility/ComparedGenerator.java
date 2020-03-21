@@ -6,6 +6,6 @@ package utility;
  *
  * @param <E>
  */
-public interface Generator<E> {
+public interface ComparedGenerator<E> {
 	public <T> T generateComparedTo(E e);
 }

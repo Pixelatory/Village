@@ -1,13 +1,12 @@
 package model.attack;
 
 import model.village.Village;
-import utility.Generator;
+import utility.ComparedGenerator;
 
 /**
- * <b>NOT IMPLEMENTED</b>
  * @author 6177000
  */
-public abstract class VillageGenerator implements Generator<Village> {
+public abstract class VillageComparedGenerator implements ComparedGenerator<Village> {
 
 	public abstract Village generateComparedTo(Village village);
 	

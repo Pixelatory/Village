@@ -21,4 +21,6 @@ public interface BuildingDamager<E extends Attackable> extends Damager<E> {
 	 * @return boolean value
 	 */
 	public boolean enemyInSight(E enemy); // to calculate, just calculate hypotenuse length from position, and model.attack nearest (if that's the building strategy)
+
+	public void attack(E enemy);
 }

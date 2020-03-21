@@ -4,10 +4,8 @@ import java.util.ArrayList;
 
 import model.army.Combatant;
 import exceptions.InvalidPlacementException;
-import model.buildings.Building;
-import utility.Generator;
+import utility.ComparedGenerator;
 import model.village.Village;
-import utility.ai.genetic.Evolution;
 
 /**
  * <b>UNIMPLEMENTED</b>
@@ -17,7 +15,7 @@ import utility.ai.genetic.Evolution;
  * @author 6177000
  *
  */
-public class Attack implements Generator<Village> {
+public class Attack implements ComparedGenerator<Village> {
 	private Village attackingVillage;
 	private Village defendingVillage;
 	private int attackScore;

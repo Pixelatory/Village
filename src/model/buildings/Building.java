@@ -1,11 +1,11 @@
 package model.buildings;
 
 import engine.renderPrimitives.Rectangle;
-import org.w3c.dom.css.Rect;
-import utility.Area;
-import utility.Position;
+import model.attack.Generative;
 import model.village.Attackable;
 import model.village.Upgradable;
+import utility.Area;
+import utility.Position;
 
 import java.awt.*;
 
@@ -15,7 +15,7 @@ import java.awt.*;
  * @author 6177000
  * @see ProductionBuilding
  */
-public abstract class Building implements Upgradable, Attackable {
+public abstract class Building implements Upgradable, Attackable, Generative {
 	protected float hp;
 	protected int level = 1;
 	protected Position pos;
