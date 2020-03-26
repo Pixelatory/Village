@@ -24,6 +24,7 @@ public abstract class Building implements Upgradable, Attackable, Generative {
 	protected Rectangle upgradingRect;
 	protected boolean isUpgrading = false;
 	protected boolean isDestroyed = false;
+	protected boolean isMovable = true;
 	
 	/**
 	 * A function which sets the initial hp value, and position of the newly created Building.
@@ -120,9 +121,11 @@ public abstract class Building implements Upgradable, Attackable, Generative {
 	 * @param xPos int value
 	 */
 	public void setXPos(int xPos) {
-		pos.setX(xPos);
-		rect.setX(xPos);
-		upgradingRect.setX(xPos);
+		if(isMovable()) {
+			pos.setX(xPos);
+			rect.setX(xPos);
+			upgradingRect.setX(xPos);
+		}
 	}
 
 	/**
@@ -131,9 +134,11 @@ public abstract class Building implements Upgradable, Attackable, Generative {
 	 * @param yPos int value
 	 */
 	public void setYPos(int yPos) {
-		pos.setY(yPos);
-		rect.setY(yPos);
-		upgradingRect.setY(yPos);
+		if(isMovable()) {
+			pos.setY(yPos);
+			rect.setY(yPos);
+			upgradingRect.setY(yPos);
+		}
 	}
 	
 	/**
@@ -181,5 +186,13 @@ public abstract class Building implements Upgradable, Attackable, Generative {
 		if(this.hp - amount <= 0)
 			this.hp = 0;
 		this.hp -= amount;
+	}
+
+	public boolean isMovable() {
+		return this.isMovable;
+	}
+
+	public void setMovable(boolean value) {
+		this.isMovable = value;
 	}
 }

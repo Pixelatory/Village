@@ -2,6 +2,7 @@ package model;
 
 import engine.GameContainer;
 import model.army.Combatant;
+import model.attack.Attack;
 import model.buildings.Building;
 import model.village.Village;
 
@@ -31,6 +32,8 @@ public class Model {
     private int mouseY = 0;
     private int mouseClickedX = 0;
     private int mouseClickedY = 0;
+
+    private Attack attack = new Attack();
 
     public Model() {
         village = new Village();

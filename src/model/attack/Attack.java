@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import model.army.Combatant;
 import exceptions.InvalidPlacementException;
+import model.buildings.Building;
 import utility.ComparedGenerator;
 import model.village.Village;
 
@@ -36,14 +37,37 @@ public class Attack implements ComparedGenerator<Village> {
 		this.attackingVillage = village;
 	}
 
+	public void clearAttackingVillage() {
+		this.attackingVillage = null;
+	}
+
+	public Village getAttackingVillage() {
+		return attackingVillage;
+	}
+
+	public Village getDefendingVillage() {
+		return defendingVillage;
+	}
+
 	public void setDefendingVillage(Village village) {
+		for(Building b : village.getBuildings())
+			b.setMovable(false);
 		this.defendingVillage = village;
 	}
-	
-	public abstract void placeCombatant(Combatant combatee, int x, int y) throws InvalidPlacementException;
-	public abstract int attackScore();
-	public abstract int defenceScore();
-	public abstract int lootScore();
-	public abstract int lootGained();
-	public abstract ArrayList<Combatant> getCombatants();
+
+	public void clearDefendingVillage() {
+		if(defendingVillage != null) {
+			for (Building b : defendingVillage.getBuildings())
+				b.setMovable(true);
+			this.defendingVillage = null;
+		}
+	}
+
+	public int attackScore() {
+		return 0;
+	}
+
+	public int lootGained() {
+		return 0;
+	}
 }
