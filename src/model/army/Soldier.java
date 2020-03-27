@@ -39,7 +39,7 @@ public class Soldier extends Combatant {
 	}
 
 	@Override
-	public float attackRadius() {
+	public int attackRadius() {
 		return AttackRadius.SOLDIER;
 	}
 

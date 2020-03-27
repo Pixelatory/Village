@@ -7,6 +7,7 @@ import engine.gfx.Font;
 import engine.gfx.Image;
 import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
+import exceptions.UnknownCombatantException;
 import model.Model;
 import model.army.*;
 import model.buildings.*;
@@ -63,28 +64,33 @@ public final class View {
         Village village = m.getVillage();
         Building selectedNewConstruction = m.getSelectedNewConstruction();
         Building selectedForUpgrade = m.getSelectedForUpgrade();
+        Combatant selectedForAttackPlacement = m.getSelectedForAttackPlacement();
         boolean buildMode = m.isBuildMode();
         boolean upgradeMode = m.isUpgradeMode();
         boolean trainingMode = m.isTrainingMode();
+        boolean attackMode = m.isAttackMode();
 
         r.setzDepth(0);
         r.drawImage(backgroundImage); // show the background image
         r.setzDepth(1);
 
-        for(Building b : village.getBuildings()) { // display all village buildings
-            r.drawRect(b.getRect());
-            r.drawText(Float.toString(b.HP()), smallFont.getFontImage(), b.xPos(), b.yPos(), Color.black);
-        }
+        if(!attackMode) {
+            for (Building b : village.getBuildings()) { // display all village buildings
+                r.drawRect(b.getRect());
+                r.drawText(Float.toString(b.HP()), smallFont.getFontImage(), b.xPos(), b.yPos(), Color.black);
+            }
 
-        if(selectedNewConstruction != null) { // after selecting a building from building mode, then display it on cursor
-            r.setzDepth(2);
-            r.drawRect(selectedNewConstruction.getRect());
+            if (selectedNewConstruction != null) { // after selecting a building from building mode, then display it on cursor
+                r.setzDepth(2);
+                r.drawRect(selectedNewConstruction.getRect());
+            }
         }
 
         if(toolbar.isVisible()
-                && !buildMode
-                && !upgradeMode
-                && !trainingMode) { // DEFAULT TOOLBAR
+        && !buildMode
+        && !upgradeMode
+        && !trainingMode
+        && !attackMode) { // DEFAULT TOOLBAR
             r.setzDepth(Integer.MAX_VALUE);
             r.drawText("Build", smallFont.getFontImage(), buildIcon.getX() - 2, toolbar.getY() + 1, Color.white);
             r.drawImage(buildIcon);
@@ -154,6 +160,9 @@ public final class View {
                 if(b.isTraining())
                     r.drawText("Training worker...", smallFont.getFontImage(), toolbar.getX() + 200, toolbar.getY() + 36, Color.white);
             } else {
+                if(selectedForUpgrade instanceof DefensiveBuilding) {
+                    r.drawHollowCircle(new Circle(selectedForUpgrade.xPos() + (selectedForUpgrade.width() / 2),selectedForUpgrade.yPos() + (selectedForUpgrade.height() / 2),((DefensiveBuilding) selectedForUpgrade).attackRadius(),Color.white));
+                }
                 r.drawText(selectedForUpgrade.getName(), smallFont.getFontImage(), toolbar.getX() + 75, toolbar.getY(), Color.white);
             }
         }
@@ -173,13 +182,79 @@ public final class View {
             r.drawCircle(catapultSymbol);
         }
 
+        if(attackMode) { // ATTACK MODE (DRAWING DEFENDING VILLAGE BUILDINGS AND ATTACK TOOLBAR AND COMBATANTS)
+            r.setzDepth(Integer.MAX_VALUE);
+            for (Building b : m.getDefendingVillage().getBuildings()) {
+                r.drawRect(b.getRect());
+                r.drawText(Float.toString(b.HP()), smallFont.getFontImage(), b.xPos(), b.yPos(), Color.black);
+            }
+
+            if(selectedForAttackPlacement != null) {
+                r.drawCircle(selectedForAttackPlacement.getCircle());
+            }
+
+            int archer = 0;
+            int catapult = 0;
+            int knight = 0;
+            int soldier = 0;
+
+            for (Combatant c : m.getAttackingVillage().getCombatees()) {
+                switch(c.getName()) {
+                    case "Archer":
+                        archer++;
+                        break;
+                    case "Catapult":
+                        catapult++;
+                        break;
+                    case "Knight":
+                        knight++;
+                        break;
+                    case "Soldier":
+                        soldier++;
+                        break;
+                    default:
+                        throw new UnknownCombatantException();
+                }
+
+                if(archer > 0
+                && catapult > 0
+                && knight > 0
+                && soldier > 0) break;
+            }
+
+            if(archer > 0) {
+                r.drawText("Archer", smallFont.getFontImage(), archerSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
+                r.drawCircle(archerSymbol);
+                r.drawText(Integer.toString(archer), smallFont.getFontImage(), archerSymbol.getX(), archerSymbol.getY(), Color.white);
+            }
+
+            if(knight > 0) {
+                r.drawText("Knight", smallFont.getFontImage(), knightSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
+                r.drawCircle(knightSymbol);
+                r.drawText(Integer.toString(knight), smallFont.getFontImage(), knightSymbol.getX(), knightSymbol.getY(), Color.white);
+            }
+
+            if(soldier > 0) {
+                r.drawText("Soldier", smallFont.getFontImage(), soldierSymbol.getX() - 20, toolbar.getY() + 2, Color.white);
+                r.drawCircle(soldierSymbol);
+                r.drawText(Integer.toString(soldier), smallFont.getFontImage(), soldierSymbol.getX(), soldierSymbol.getY(), Color.white);
+            }
+
+            if(catapult > 0) {
+                r.drawText("Catapult", smallFont.getFontImage(), catapultSymbol.getX() - 28, toolbar.getY() + 2, Color.white);
+                r.drawCircle(catapultSymbol);
+                r.drawText(Integer.toString(catapult), smallFont.getFontImage(), catapultSymbol.getX(), catapultSymbol.getY(), Color.white);
+            }
+        }
+
+
         r.setzDepth(Integer.MAX_VALUE); // DISPLAYING RESOURCE COUNTS
         r.drawText("Gold: " + village.getGold(), regularFont.getFontImage(), 0, 15, Color.WHITE);
         r.drawText("Iron: " + village.getIron(), regularFont.getFontImage(), 0, 30, Color.WHITE);
         r.drawText("Wood: " + village.getWood(), regularFont.getFontImage(), 0, 45, Color.WHITE);
         r.drawText("Food: " + village.getFood(), regularFont.getFontImage(), 0, 60, Color.WHITE);
         r.setzDepth(Integer.MAX_VALUE - 1);
-        r.drawRect(toolbar);
+        r.drawRect(toolbar); // DISPLAYING TOOLBAR
     }
 
     private int countCombatants(ArrayList<Combatant> combatees, String name) {
@@ -221,6 +296,10 @@ public final class View {
 
     public void setBackgroundImage(Image backgroundImage) {
         this.backgroundImage = backgroundImage;
+    }
+
+    public Image getAttackIcon() {
+        return attackIcon;
     }
 
     public Image getBuildIcon() {

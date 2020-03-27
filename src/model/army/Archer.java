@@ -30,7 +30,7 @@ public class Archer extends Combatant {
 	}
 
 	@Override
-	public float attackRadius() {
+	public int attackRadius() {
 		return AttackRadius.ARCHER;
 	}
 

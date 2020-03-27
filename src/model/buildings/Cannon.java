@@ -1,18 +1,10 @@
 package model.buildings;
 
-import java.awt.Color;
-
 import engine.renderPrimitives.Rectangle;
-import model.statics.AttackRadius;
-import model.statics.AttackSpeed;
-import model.statics.AttackStrength;
-import model.statics.GoldCosts;
-import model.statics.IronCosts;
-import model.statics.MaxHealthPoints;
-import model.statics.MaxLevels;
-import model.statics.UpgradeTimes;
-import model.statics.WoodCosts;
+import model.statics.*;
 import utility.Area;
+
+import java.awt.*;
 
 /**
  * Class representing an Cannon.
@@ -44,7 +36,7 @@ public final class Cannon extends DefensiveBuilding {
 	}
 
 	@Override
-	public float attackRadius() {
+	public int attackRadius() {
 		return AttackRadius.CANNON[level() - 1];
 	}
 

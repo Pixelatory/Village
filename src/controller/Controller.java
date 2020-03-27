@@ -5,10 +5,7 @@ import engine.gfx.Image;
 import engine.renderPrimitives.Circle;
 import engine.renderPrimitives.Rectangle;
 import model.Model;
-import model.army.Archer;
-import model.army.Catapult;
-import model.army.Knight;
-import model.army.Soldier;
+import model.army.*;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
 import view.View;
@@ -27,8 +24,10 @@ public final class Controller {
         boolean buildMode = model.isBuildMode();
         boolean upgradeMode = model.isUpgradeMode();
         boolean trainingMode = model.isTrainingMode();
+        boolean attackMode = model.isAttackMode();
         Building selectedForUpgrade = model.getSelectedForUpgrade();
         Building selectedNewConstruction = model.getSelectedNewConstruction();
+        Combatant selectedForAttackPlacement = model.getSelectedForAttackPlacement();
         Rectangle toolbar = view.getToolbar();
         mouseX = model.getMouseX();
         mouseY = model.getMouseY();
@@ -46,7 +45,7 @@ public final class Controller {
             imageTileRate = 0;
 
         if(toolbar.isVisible()
-                && rightClickUp(gc)) {
+        && rightClickUp(gc)) {
             model.setBuildMode(false);
             model.setUpgradeMode(false);
             model.setTrainingMode(false);
@@ -58,8 +57,11 @@ public final class Controller {
 
         for(Building b : model.getVillage().getBuildings()) {
             if(b != selectedForUpgrade
-                    && mouseInBounds(b)
-                    && leftClickDown(gc)) {
+            && !attackMode
+            && !buildMode
+            && !trainingMode
+            && mouseInBounds(b)
+            && leftClickDown(gc)) {
                 model.setUpgradeMode(true);
                 model.setBuildMode(false);
                 model.setTrainingMode(false);
@@ -72,8 +74,8 @@ public final class Controller {
         } // CLICKING ON A BUILDING ON SCREEN
 
         if(selectedForUpgrade != null
-                && !mouseInBounds(toolbar)
-                && leftClickDown(gc)) {
+        && !mouseInBounds(toolbar)
+        && leftClickDown(gc)) {
             model.setMouseClickedX(mouseX - selectedForUpgrade.xPos());
             model.setMouseClickedY(mouseY - selectedForUpgrade.yPos());
             view.getClickSound().play();
@@ -81,8 +83,9 @@ public final class Controller {
         } // WHEN MOVING A BUILDING THAT WAS ALREADY CLICKED
 
         if(selectedForUpgrade != null
-                && toolbar.isVisible()
-                && leftClickUp(gc)) {
+        && !attackMode
+        && toolbar.isVisible()
+        && leftClickUp(gc)) {
             if(mouseInBounds(view.getUpgradeIcon())) {
                 view.getClickSound().play();
                 model.getVillage().performUpgrade(selectedForUpgrade);
@@ -103,13 +106,14 @@ public final class Controller {
         } // UPGRADE MODE
 
         if(selectedForUpgrade != null
-                && mouseY - mouseClickedY + selectedForUpgrade.height() <= toolbar.getY()
-                && mouseY - mouseClickedY >= 0
-                && mouseX - mouseClickedX >= 0
-                && mouseX - mouseClickedX + selectedForUpgrade.width() <= GameContainer.getWidth()
-                && upgradeMode
-                && holdingLeftClick(gc)
-                && !mouseInBounds(toolbar)) {
+        && mouseY - mouseClickedY + selectedForUpgrade.height() <= toolbar.getY()
+        && mouseY - mouseClickedY >= 0
+        && mouseX - mouseClickedX >= 0
+        && mouseX - mouseClickedX + selectedForUpgrade.width() <= GameContainer.getWidth()
+        && upgradeMode
+        && !attackMode
+        && holdingLeftClick(gc)
+        && !mouseInBounds(toolbar)) {
 
             boolean overlap = false;
             for(Building b : model.getVillage().getBuildings()) {
@@ -139,7 +143,9 @@ public final class Controller {
                 selectedNewConstruction.setYPos(mouseY - selectedNewConstruction.width() / 2);
                 return;
             }
-        } else {
+        } else if(!attackMode
+        && !trainingMode
+        && !upgradeMode) {
             if(buildMode
             && leftClickUp(gc)) {
                 if(mouseInBounds(view.getArcherTowerSymbol())) {
@@ -201,6 +207,7 @@ public final class Controller {
         if(trainingMode
         && !upgradeMode
         && !buildMode
+        && !attackMode
         && leftClickUp(gc)) {
             if(mouseInBounds(view.getArcherSymbol())) {
                 model.getVillage().newIndividual(new Archer(0,0));
@@ -223,10 +230,47 @@ public final class Controller {
             }
         }
 
+        if(attackMode && leftClickUp(gc) && selectedForAttackPlacement == null) {
+            if(mouseInBounds(view.getArcherSymbol())) {
+                for(Combatant c : model.getAttackingVillage().getCombatees()) {
+                    if(c.getName().equals("Archer")) {
+                        model.setSelectedForAttackPlacement(new Archer(mouseX,mouseY));
+                    }
+                }
+            } else if (mouseInBounds(view.getSoldierSymbol())) {
+                for(Combatant c : model.getAttackingVillage().getCombatees()) {
+                    if(c.getName().equals("Soldier")) {
+                        model.setSelectedForAttackPlacement(new Soldier(mouseX,mouseY));
+                    }
+                }
+            } else if (mouseInBounds(view.getCatapultSymbol())) {
+                for(Combatant c : model.getAttackingVillage().getCombatees()) {
+                    if(c.getName().equals("Catapult")) {
+                        model.setSelectedForAttackPlacement(new Catapult(mouseX,mouseY));
+                    }
+                }
+            } else if (mouseInBounds(view.getKnightSymbol())) {
+                for(Combatant c : model.getAttackingVillage().getCombatees()) {
+                    if(c.getName().equals("Knight")) {
+                        model.setSelectedForAttackPlacement(new Knight(mouseX,mouseY));
+                    }
+                }
+            }
+        }
+
+        if(selectedForAttackPlacement != null) {
+            selectedForAttackPlacement.setXPos(mouseX);
+            selectedForAttackPlacement.setYPos(mouseY);
+            break;
+        } else if {
+
+        }
+
         if(toolbar.isVisible()
         && !buildMode
         && !upgradeMode
         && !trainingMode
+        && !attackMode
         && mouseInBounds(view.getBuildIcon())
         && leftClickUp(gc)) {
             view.getClickSound().play();
@@ -238,12 +282,26 @@ public final class Controller {
         && !trainingMode
         && !upgradeMode
         && !buildMode
+        && !attackMode
         && mouseInBounds(view.getTrainCombatantIcon())
         && leftClickUp(gc)) {
             view.getClickSound().play();
             model.setTrainingMode(true);
             return;
         } // CLICKING ON TRAIN BUTTON
+
+        if(toolbar.isVisible()
+        && !trainingMode
+        && !upgradeMode
+        && !buildMode
+        && !attackMode
+        && mouseInBounds(view.getAttackIcon())
+        && leftClickUp(gc)) {
+            view.getClickSound().play();
+            model.setAttackMode(true);
+            model.startAttack();
+            return;
+        } // CLICKING ON ATTACK BUTTON
 
         System.out.println(mouseX + " " + mouseY);
     }

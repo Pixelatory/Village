@@ -23,7 +23,7 @@ public interface Damager<E extends Attackable> {
 	 * 
 	 * @return float value
 	 */
-	public float attackRadius();
+	public int attackRadius();
 	
 	/**
 	 * A getter function that returns a float value representing how fast you can model.attack.

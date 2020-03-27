@@ -44,7 +44,7 @@ public class Catapult extends Combatant {
 	}
 
 	@Override
-	public float attackRadius() {
+	public int attackRadius() {
 		return AttackRadius.CANNON[level() - 1];
 	}
 

@@ -3,6 +3,7 @@ package model.buildings;
 import engine.renderPrimitives.Rectangle;
 import model.attack.Generative;
 import model.village.Attackable;
+import model.village.Movable;
 import model.village.Upgradable;
 import utility.Area;
 import utility.Position;
@@ -15,7 +16,7 @@ import java.awt.*;
  * @author 6177000
  * @see ProductionBuilding
  */
-public abstract class Building implements Upgradable, Attackable, Generative {
+public abstract class Building implements Upgradable, Attackable, Generative, Movable {
 	protected float hp;
 	protected int level = 1;
 	protected Position pos;

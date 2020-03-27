@@ -23,10 +23,12 @@ public class Model {
     private boolean buildMode = false;
     private boolean upgradeMode = false;
     private boolean trainingMode = false;
+    private boolean attackMode = false;
 
     private Village village;
     private Building selectedNewConstruction = null;
     private Building selectedForUpgrade = null;
+    private Combatant selectedForAttackPlacement = null;
 
     private int mouseX = 0;
     private int mouseY = 0;
@@ -81,6 +83,14 @@ public class Model {
         this.selectedNewConstruction = selectedNewConstruction;
     }
 
+    public void setSelectedForAttackPlacement(Combatant c) {
+        selectedForAttackPlacement = c;
+    }
+
+    public Combatant getSelectedForAttackPlacement() {
+        return selectedForAttackPlacement;
+    }
+
     public Building getSelectedForUpgrade() {
         return selectedForUpgrade;
     }
@@ -119,5 +129,35 @@ public class Model {
 
     public void setBuildMode(boolean buildMode) {
         this.buildMode = buildMode;
+    }
+
+    public boolean isAttackMode() {
+        return attackMode;
+    }
+
+    public void setAttackMode(boolean value) {
+        attackMode = value;
+    }
+
+    public boolean isUnderAttack() {
+        return attack.getAttackingVillage() != null && attack.getDefendingVillage() != null;
+    }
+
+    public Village getAttackingVillage() {
+        return attack.getAttackingVillage();
+    }
+
+    public Village getDefendingVillage() {
+        return attack.getDefendingVillage();
+    }
+
+    public void startAttack() {
+        attack.setDefendingVillage(new Village());
+        attack.setAttackingVillage(village);
+    }
+
+    public void endAttack() {
+        attack.clearAttackingVillage();
+        attack.clearDefendingVillage();
     }
 }

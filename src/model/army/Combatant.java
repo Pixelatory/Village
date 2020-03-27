@@ -3,11 +3,12 @@ package model.army;
 import engine.renderPrimitives.Circle;
 import model.attack.CombatantDamager;
 import model.buildings.Building;
-import utility.Area;
-import utility.Position;
 import model.village.Attackable;
+import model.village.Movable;
 import model.village.Trainable;
 import model.village.Upgradable;
+import utility.Area;
+import utility.Position;
 
 /**
  * An abstract class that encompasses what a Combatant is and does.
@@ -18,7 +19,7 @@ import model.village.Upgradable;
  * @see Knight
  * @see Soldier
  */
-public abstract class Combatant implements Trainable, Attackable, CombatantDamager<Building>, Upgradable {
+public abstract class Combatant implements Trainable, Attackable, CombatantDamager<Building>, Upgradable, Movable {
 	protected float hp;
 	protected Position pos;
 	protected int level = 1;
@@ -107,5 +108,23 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 
 	public void setPlaced(boolean value) {
 		this.isPlaced = value;
+	}
+
+	public int xPos() {
+		return pos.getX();
+	}
+
+	public int yPos() {
+		return pos.getY();
+	}
+
+	public void setXPos(int xPos) {
+		pos.setX(xPos);
+		circle.setX(xPos);
+	}
+
+	public void setYPos(int yPos) {
+		pos.setY(yPos);
+		circle.setY(yPos);
 	}
 }

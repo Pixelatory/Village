@@ -39,7 +39,7 @@ public class Knight extends Combatant {
 	}
 
 	@Override
-	public float attackRadius() {
+	public int attackRadius() {
 		return AttackRadius.KNIGHT;
 	}
 

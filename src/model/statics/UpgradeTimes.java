@@ -27,10 +27,10 @@ public final class UpgradeTimes {
 	public static final int[] LUMBERMEN = {5,5,5,5,5};
 
 	//Combatants
-	public static final int[] ARCHER = {10, 10, 10, 10, 10};
-	public static final int[] SOLDIER = {10, 10, 10, 10, 10};
-	public static final int[] CATAPULT = {10, 10, 10, 10, 10};
-	public static final int[] KNIGHT = {10, 10, 10, 10, 10};
+	public static final int[] ARCHER = {0, 10, 10, 10, 10};
+	public static final int[] SOLDIER = {0, 10, 10, 10, 10};
+	public static final int[] CATAPULT = {0, 10, 10, 10, 10};
+	public static final int[] KNIGHT = {0, 10, 10, 10, 10};
 
 	
 }
