@@ -54,4 +54,12 @@ public interface Damager<E extends Attackable> {
 	 * @param value true/false
 	 */
 	public void setCanAttack(boolean value);
+
+	/**
+	 * A function which will calculate if the enemy is in sight, depending on the radius of the attacker and position of the attackable.
+	 *
+	 * @param enemy Attackable object
+	 * @return boolean value
+	 */
+	public boolean enemyInSight(E enemy); // to calculate, just calculate hypotenuse length from position, and model.attack nearest (if that's the building strategy)
 }

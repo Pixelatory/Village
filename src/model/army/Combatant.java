@@ -55,6 +55,18 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 			this.hp = 0;
 		this.hp -= amount;
 	}
+
+	public boolean enemyInSight(Building enemy) {
+		Position enemyPosition = enemy.getPosition();
+
+		if(enemyPosition != null && Math.hypot(Math.abs(enemyPosition.getX() - xPos()), Math.abs(enemyPosition.getY() - yPos())) <= attackRadius()) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public abstract int attackRadius();
 	
 	public void attack(Building building) {
 		building.takeDamage(attackStrength());

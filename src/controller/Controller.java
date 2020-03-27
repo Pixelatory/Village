@@ -11,6 +11,7 @@ import model.habitants.ProductionHabitant;
 import view.View;
 
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public final class Controller {
 
@@ -228,42 +229,69 @@ public final class Controller {
                 model.getVillage().newIndividual(new Knight(0,0));
                 return;
             }
-        }
+        } // COMBATANT TRAINING TOOLBAR
 
         if(attackMode && leftClickUp(gc) && selectedForAttackPlacement == null) {
+
+            ArrayList<Combatant> combatees = model.getAttackingVillage().getCombatees();
+
             if(mouseInBounds(view.getArcherSymbol())) {
-                for(Combatant c : model.getAttackingVillage().getCombatees()) {
-                    if(c.getName().equals("Archer")) {
-                        model.setSelectedForAttackPlacement(new Archer(mouseX,mouseY));
+                for (Combatant c : combatees) {
+                    if (c.getName().equals("Archer")) {
+                        model.setSelectedForAttackPlacement(c);
                     }
                 }
             } else if (mouseInBounds(view.getSoldierSymbol())) {
-                for(Combatant c : model.getAttackingVillage().getCombatees()) {
+                for(Combatant c : combatees) {
                     if(c.getName().equals("Soldier")) {
-                        model.setSelectedForAttackPlacement(new Soldier(mouseX,mouseY));
+                        model.setSelectedForAttackPlacement(c);
                     }
                 }
             } else if (mouseInBounds(view.getCatapultSymbol())) {
-                for(Combatant c : model.getAttackingVillage().getCombatees()) {
+                for(Combatant c : combatees) {
                     if(c.getName().equals("Catapult")) {
-                        model.setSelectedForAttackPlacement(new Catapult(mouseX,mouseY));
+                        model.setSelectedForAttackPlacement(c);
                     }
                 }
             } else if (mouseInBounds(view.getKnightSymbol())) {
-                for(Combatant c : model.getAttackingVillage().getCombatees()) {
+                for(Combatant c : combatees) {
                     if(c.getName().equals("Knight")) {
-                        model.setSelectedForAttackPlacement(new Knight(mouseX,mouseY));
+                        model.setSelectedForAttackPlacement(c);
                     }
                 }
             }
-        }
+        } // SELECTING COMBATANT FROM TOOLBAR
 
-        if(selectedForAttackPlacement != null) {
-            selectedForAttackPlacement.setXPos(mouseX);
-            selectedForAttackPlacement.setYPos(mouseY);
-            break;
-        } else if {
+        if(attackMode && selectedForAttackPlacement != null) {
+            if(leftClickUp(gc)) {
+                ArrayList<Combatant> combatees = model.getAttackingVillage().getCombatees();
+                Combatant placedCombatant = model.getSelectedForAttackPlacement();
 
+                model.placeCombatant(placedCombatant);
+                combatees.remove(placedCombatant);
+
+                for(Combatant c : combatees) { // This is for when we place it, instead of clicking on the toolbar again we'll just get the next combatant
+                    if(c.getName().equals(model.getSelectedForAttackPlacement().getName())) {
+                        model.setSelectedForAttackPlacement(c);
+                        break;
+                    }
+                }
+
+                if(model.getSelectedForAttackPlacement() == placedCombatant)
+                    model.setSelectedForAttackPlacement(null);
+
+
+                view.getClickSound().play();
+                return;
+            } else if (rightClickUp(gc)) {
+                model.setSelectedForAttackPlacement(null);
+                view.getClickSound().play();
+                return;
+            } else {
+                selectedForAttackPlacement.setXPos(mouseX);
+                selectedForAttackPlacement.setYPos(mouseY);
+                return;
+            }
         }
 
         if(toolbar.isVisible()

@@ -160,4 +160,12 @@ public class Model {
         attack.clearAttackingVillage();
         attack.clearDefendingVillage();
     }
+
+    public void placeCombatant(Combatant combatant) {
+        attack.addPlacedCombatant(combatant);
+    }
+
+    public ArrayList<Combatant> getPlacedCombatants() {
+        return attack.getPlacedCombatants();
+    }
 }

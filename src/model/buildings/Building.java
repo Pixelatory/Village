@@ -141,6 +141,10 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 			upgradingRect.setY(yPos);
 		}
 	}
+
+	public Position getPosition() {
+		return pos;
+	}
 	
 	/**
 	 * A function which returns the rectangle that represents a Building.

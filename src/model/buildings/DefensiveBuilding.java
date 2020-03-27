@@ -1,11 +1,11 @@
 package model.buildings;
 
 import model.army.Combatant;
-import model.attack.BuildingDamager;
-import utility.Position;
+import model.attack.Damager;
 import model.village.Attackable;
+import utility.Position;
 
-public abstract class DefensiveBuilding extends Building implements BuildingDamager<Combatant>, Attackable {
+public abstract class DefensiveBuilding extends Building implements Damager<Combatant>, Attackable {
 	
 	protected boolean canAttack = true;
 

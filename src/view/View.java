@@ -189,6 +189,11 @@ public final class View {
                 r.drawText(Float.toString(b.HP()), smallFont.getFontImage(), b.xPos(), b.yPos(), Color.black);
             }
 
+            for(Combatant c : m.getPlacedCombatants()) {
+                r.drawCircle(c.getCircle());
+                r.drawHollowCircle(new Circle(c.xPos(),c.yPos(),c.attackRadius(),Color.white));
+            }
+
             if(selectedForAttackPlacement != null) {
                 r.drawCircle(selectedForAttackPlacement.getCircle());
             }
@@ -215,11 +220,6 @@ public final class View {
                     default:
                         throw new UnknownCombatantException();
                 }
-
-                if(archer > 0
-                && catapult > 0
-                && knight > 0
-                && soldier > 0) break;
             }
 
             if(archer > 0) {

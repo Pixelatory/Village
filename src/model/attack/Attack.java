@@ -1,12 +1,11 @@
 package model.attack;
 
-import java.util.ArrayList;
-
 import model.army.Combatant;
-import exceptions.InvalidPlacementException;
 import model.buildings.Building;
-import utility.ComparedGenerator;
 import model.village.Village;
+import utility.ComparedGenerator;
+
+import java.util.ArrayList;
 
 /**
  * <b>UNIMPLEMENTED</b>
@@ -20,8 +19,8 @@ public class Attack implements ComparedGenerator<Village> {
 	private Village attackingVillage;
 	private Village defendingVillage;
 	private int attackScore;
-	private int lootScore;
 	private int lootGained;
+	private ArrayList<Combatant> placedCombatants = new ArrayList<>();
 
 	/**
 	 * Generating a list of combatants compared to another villages buildings.
@@ -63,11 +62,19 @@ public class Attack implements ComparedGenerator<Village> {
 		}
 	}
 
+	public void addPlacedCombatant(Combatant combatant) {
+		placedCombatants.add(combatant);
+	}
+
+	public ArrayList<Combatant> getPlacedCombatants() {
+		return placedCombatants;
+	}
+
 	public int attackScore() {
-		return 0;
+		return attackScore;
 	}
 
 	public int lootGained() {
-		return 0;
+		return lootGained;
 	}
 }

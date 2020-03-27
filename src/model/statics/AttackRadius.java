@@ -13,8 +13,8 @@ public final class AttackRadius {
 	public static final int[] CANNON = {40,45,50,55,60};
 	
 	//Combatants
-	public static final int ARCHER = 5;
-	public static final int KNIGHT = 2;
+	public static final int ARCHER = 10;
+	public static final int KNIGHT = 5;
 	public static final int CATAPULT = 50;
-	public static final int SOLDIER = 15;
+	public static final int SOLDIER = 5;
 }

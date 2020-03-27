@@ -1,5 +1,7 @@
 package model.village;
 
+import utility.Position;
+
 public interface Attackable {
 	/**
 	 * Reduces the hp of this combatant by an amount. If it goes below 0, then hp will just go to 0.
@@ -7,4 +9,6 @@ public interface Attackable {
 	 * @param amount float value representing the amount of damage taken
 	 */
 	public void takeDamage(float amount);
+
+	public Position getPosition();
 }
