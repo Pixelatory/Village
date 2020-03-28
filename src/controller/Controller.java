@@ -13,6 +13,8 @@ import view.View;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public final class Controller {
 
@@ -20,6 +22,7 @@ public final class Controller {
     private int mouseY;
     private int mouseClickedX;
     private int mouseClickedY;
+    Timer timer = new Timer();
 
     float imageTileRate = 0;
     public void update(GameContainer gc, Model model, View view, float dt) {
@@ -55,10 +58,18 @@ public final class Controller {
                 boolean didAttack = false;
 
                 for(Building b : model.getDefendingVillage().getBuildings()) { // check if a building is in attack radius of combatant
-                    System.out.println(b.getName() + " " + c.enemyInSight(b));
-                    if(c.enemyInSight(b)) {
-                        c.attack(b);
+                    if(c.enemyInSight(b) && b.HP() > 0) {
                         didAttack = true;
+                        if(c.canAttack()) {
+                            timer.schedule(new TimerTask() {
+                                @Override
+                                public void run() {
+                                    c.setCanAttack(true);
+                                }
+                            }, (long) (c.attackSpeed() * 1000));
+                            c.setCanAttack(false);
+                            c.attack(b);
+                        }
                         break;
                     }
                 }
@@ -66,41 +77,40 @@ public final class Controller {
                 if(!didAttack) { // If this combatant didn't attack cause not in range, then move to closest building
                     Position closestBuildingPosition = null;
                     for(Building b : model.getDefendingVillage().getBuildings()) {
-                        int xPos = b.xPos() + (b.width() / 2);
-                        int yPos = b.yPos() + (b.height() / 2);
+                        if(b.HP() > 0) {
+                            int xPos = b.xPos() + (b.width() / 2);
+                            int yPos = b.yPos() + (b.height() / 2);
 
-                        if(closestBuildingPosition == null) {
-                            closestBuildingPosition = new Position(xPos,yPos);
-                        } else if (Math.hypot(xPos - c.xPos(), yPos - c.yPos()) <
-                                Math.hypot(closestBuildingPosition.getX() - c.xPos(), closestBuildingPosition.getY() - c.yPos())) {
-                            closestBuildingPosition = new Position(xPos,yPos);
+                            if (closestBuildingPosition == null) {
+                                closestBuildingPosition = new Position(xPos, yPos);
+                                System.out.println(b.getName());
+                            } else if (Math.hypot(xPos - c.xPos(), yPos - c.yPos()) <=
+                                    Math.hypot(closestBuildingPosition.getX() - c.xPos(), closestBuildingPosition.getY() - c.yPos())) {
+                                System.out.println(b.getName());
+                                closestBuildingPosition = new Position(xPos, yPos);
+                            }
+                        }
+                    }
+                    if(closestBuildingPosition != null) {
+                        int xPos = closestBuildingPosition.getX();
+                        int yPos = closestBuildingPosition.getY();
+
+                        if (xPos < c.xPos()) {
+                            c.setXPos(c.xPos() - 1);
+                        } else if (xPos > c.xPos()) {
+                            c.setXPos(c.xPos() + 1);
+                        }
+
+                        if (yPos < c.yPos()) {
+                            c.setYPos(c.yPos() - 1);
+                        } else if (yPos > c.yPos()) {
+                            c.setYPos(c.yPos() + 1);
                         }
                     }
 
-                    int xPos = closestBuildingPosition.getX();
-                    int yPos = closestBuildingPosition.getY();
-                    double angle = Math.toDegrees(Math.atan2(xPos - c.xPos(), yPos - c.yPos()));
-
-                    double movement = c.movementSpeed();
-
-                    double xMovement = movement * Math.toDegrees(Math.sin(Math.toRadians(angle)));
-
-                    System.out.println(xMovement);
-
                 }
             }
-        }
-
-        if(toolbar.isVisible()
-        && rightClickUp(gc)) {
-            model.setBuildMode(false);
-            model.setUpgradeMode(false);
-            model.setTrainingMode(false);
-            model.setSelectedNewConstruction(null);
-            model.setSelectedForUpgrade(null);
-            view.getClickSound().play();
-            return;
-        } // RIGHT CLICKING ANYWHERE WHEN TOOLBAR IS VISIBLE
+        } // FOR ATTACKING OF COMBATANTS AND BUILDINGS AND MOVING COMBATANTS TO BUILDINGS
 
         for(Building b : model.getVillage().getBuildings()) {
             if(b != selectedForUpgrade
@@ -285,31 +295,39 @@ public final class Controller {
                 for (Combatant c : combatees) {
                     if (c.getName().equals("Archer")) {
                         model.setSelectedForAttackPlacement(c);
+                        view.getClickSound().play();
+                        return;
                     }
                 }
             } else if (mouseInBounds(view.getSoldierSymbol())) {
                 for(Combatant c : combatees) {
                     if(c.getName().equals("Soldier")) {
                         model.setSelectedForAttackPlacement(c);
+                        view.getClickSound().play();
+                        return;
                     }
                 }
             } else if (mouseInBounds(view.getCatapultSymbol())) {
                 for(Combatant c : combatees) {
                     if(c.getName().equals("Catapult")) {
                         model.setSelectedForAttackPlacement(c);
+                        view.getClickSound().play();
+                        return;
                     }
                 }
             } else if (mouseInBounds(view.getKnightSymbol())) {
                 for(Combatant c : combatees) {
                     if(c.getName().equals("Knight")) {
                         model.setSelectedForAttackPlacement(c);
+                        view.getClickSound().play();
+                        return;
                     }
                 }
             }
         } // SELECTING COMBATANT FROM TOOLBAR
 
         if(attackMode && selectedForAttackPlacement != null) {
-            if(leftClickUp(gc)) {
+            if(leftClickUp(gc) && mouseY < toolbar.getY()) {
                 ArrayList<Combatant> combatees = model.getAttackingVillage().getCombatees();
                 Combatant placedCombatant = model.getSelectedForAttackPlacement();
 
@@ -376,6 +394,17 @@ public final class Controller {
             model.startAttack();
             return;
         } // CLICKING ON ATTACK BUTTON
+
+        if(toolbar.isVisible()
+        && rightClickUp(gc)) {
+            model.setBuildMode(false);
+            model.setUpgradeMode(false);
+            model.setTrainingMode(false);
+            model.setSelectedNewConstruction(null);
+            model.setSelectedForUpgrade(null);
+            view.getClickSound().play();
+            return;
+        } // RIGHT CLICKING ANYWHERE WHEN TOOLBAR IS VISIBLE
     }
 
     private boolean mouseInBounds(int x, int y, int width, int height) {

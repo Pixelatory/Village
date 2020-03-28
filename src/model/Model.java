@@ -154,7 +154,7 @@ public class Model {
 
     public void startAttack() {
         Village villageTest = new Village();
-        villageTest.newConstruction(new ArcherTower(100,100));
+        villageTest.newConstruction(new ArcherTower(200,200));
         attack.setDefendingVillage(villageTest);
         attack.setAttackingVillage(village);
     }

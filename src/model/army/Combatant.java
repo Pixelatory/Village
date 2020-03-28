@@ -58,9 +58,10 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 	}
 
 	public boolean enemyInSight(Building enemy) {
-		Position enemyPosition = enemy.getPosition();
+		int enemyX = enemy.xPos() + (enemy.width() / 2);
+		int enemyY = enemy.yPos() + (enemy.height() / 2);
 
-		if(enemyPosition != null && Math.hypot(Math.abs(enemyPosition.getX() - xPos()), Math.abs(enemyPosition.getY() - yPos())) <= attackRadius()) {
+		if(Math.hypot(Math.abs(enemyX - xPos()), Math.abs(enemyY - yPos())) <= attackRadius()) {
 			return true;
 		}
 

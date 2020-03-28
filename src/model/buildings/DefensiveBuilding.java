@@ -27,12 +27,6 @@ public abstract class DefensiveBuilding extends Building implements Damager<Comb
 		enemy.takeDamage(attackStrength());
 	}
 	
-	public void takeDamage(float amount) {
-		if(this.hp - amount > 0)
-			this.hp -= amount;
-		this.hp = 0;
-	}
-	
 	public boolean canAttack() {
 		return this.canAttack;
 	}
