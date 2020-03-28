@@ -11,19 +11,19 @@ package model.statics;
 public final class MaxHealthPoints {
 	//Buildings
 	//Array of ints/floats, each index referring to the level
-	public static final float[] ARCHER_TOWER = {100,200,300,400,500};
+	public static final float[] ARCHER_TOWER = {380,420,460,500,540};
 	public static final float VILLAGE_HALL = 1500;
-	public static final float[] CANNON = {150,250,350,450,550};
-	public static final float[] GOLD_MINE = {50,100,150,200,250};
-	public static final float[] IRON_MINE = {50,100,150,200,250};
-	public static final float[] LUMBERMILL = {50,100,150,200,250};
-	public static final float[] FARM = {50,100,150,200,250};
+	public static final float[] CANNON = {420,470,520,570,620};
+	public static final float[] GOLD_MINE = {400,440,480,520,560};
+	public static final float[] IRON_MINE = {400,440,480,520,560};
+	public static final float[] LUMBERMILL = {400,440,480,520,560};
+	public static final float[] FARM = {400,440,480,520,560};
 
 
 	
 	//Combatants
-	public static final float[] ARCHER = {100,115,130,145,200};
-	public static final float[] SOLDIER = {100,115,130,145,200};
-	public static final float[] KNIGHT = {100,115,130,145,200};
-	public static final float[] CATAPULT = {100,115,130,145,200};
+	public static final float[] ARCHER = {20,23,28,33,40};
+	public static final float[] SOLDIER = {45,54,65,78,95};
+	public static final float[] KNIGHT = {45,54,65,78,95};
+	public static final float[] CATAPULT = {300,360,430,520,720};
 }

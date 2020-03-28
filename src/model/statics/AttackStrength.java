@@ -9,12 +9,12 @@ package model.statics;
  */
 public final class AttackStrength {
 	//Buildings
-	public static final float[] ARCHER_TOWER = {5,10,15,20,25};
-	public static final float[] CANNON = {5,10,15,20,25};
+	public static final float[] ARCHER_TOWER = {5.5f,7.5f,9.5f,12.5f,15f};
+	public static final float[] CANNON = {7.2f,8.8f,12,15.2f,20};
 	
 	//Combatant
-	public static final float[] ARCHER = {5,7,10,13,15};
-	public static final float[] CATAPULT = {10,20,30,40,50};
-	public static final float[] KNIGHT = {5,7,10,13,15};
-	public static final float[] SOLDIER = {5,7,10,13,15};
+	public static final float[] ARCHER = {7,9,12,16,20};
+	public static final float[] CATAPULT = {22,28,38,48,62};
+	public static final float[] KNIGHT = {75,105,135,187.5f,255};
+	public static final float[] SOLDIER = {8,11,14,18,23};
 }

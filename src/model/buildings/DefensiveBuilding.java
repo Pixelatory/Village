@@ -15,8 +15,11 @@ public abstract class DefensiveBuilding extends Building implements Damager<Comb
 	
 	public boolean enemyInSight(Combatant enemy) {
 		Position enemyPosition = enemy.getPosition();
+
+		int xPos = xPos() + width();
+		int yPos = yPos() + height();
 		
-		if(enemyPosition != null && Math.hypot(Math.abs(enemyPosition.getX() - xPos()), Math.abs(enemyPosition.getY() - yPos())) <= attackRadius()) {
+		if(enemyPosition != null && Math.hypot(Math.abs(enemyPosition.getX() - xPos), Math.abs(enemyPosition.getY() - yPos)) <= attackRadius()) {
 			return true;
 		}
 		

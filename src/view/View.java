@@ -29,11 +29,12 @@ public final class View {
     private Image backgroundImage = new Image("/grass.png",0,0);
     private Image buildIcon = new Image("/icons/build.png", toolbar.getX() + 5, toolbar.getY() + 16);
     private Image upgradeIcon = new Image("/icons/upgrade.png", toolbar.getX() + 5, toolbar.getY() + 16);
-    private Image attackIcon = new Image("/icons/attack.png", GameContainer.getWidth() - 50, toolbar.getY() + 16);
+    private Image attackIcon = new Image("/icons/attack.png", toolbar.getWidth() - 50, toolbar.getY() + 16);
 
     private Image upgradeTroopIcon = new Image("/icons/upgradeTroop.png", toolbar.getX() + 145, toolbar.getY() + 16);
     private Image trainIcon = new Image("/icons/train.png",toolbar.getX() + 75, toolbar.getY() + 16);
     private Image trainCombatantIcon = new Image("/icons/trainCombatant.png", toolbar.getX() + 75, toolbar.getY() + 16);
+    private Image endBattleIcon = new Image("/icons/end-battle.png", toolbar.getX() + toolbar.getWidth() - 60, toolbar.getY() + 16);
 
     // Used for the build mode toolbar
     private Rectangle archerTowerSymbol = new ArcherTower(toolbar.getX() + 25,toolbar.getY() + 15).getRect();
@@ -52,6 +53,11 @@ public final class View {
     //Sounds
     private Sound clickSound = new Sound("/sounds/button_click.wav");
     private Sound mainMusic = new Sound("/music/main-theme.wav");
+
+    private Sound deployArcher = new Sound("/sounds/archer_deploy.wav");
+    private Sound deployKnight = new Sound("/sounds/knight_deploy.wav");
+    private Sound deploySoldier = new Sound("/sounds/soldier_deploy.wav");
+    private Sound deployCatapult = new Sound("/sounds/catapult_deploy.wav");
 
 
     public View() {
@@ -182,16 +188,27 @@ public final class View {
             r.drawCircle(catapultSymbol);
         }
 
-        if(attackMode) { // ATTACK MODE (DRAWING DEFENDING VILLAGE BUILDINGS AND ATTACK TOOLBAR AND COMBATANTS)
+        if(attackMode) { // ATTACK MODE TOOLBAR
+
+            // (DRAWING DEFENDING VILLAGE BUILDINGS AND ATTACK TOOLBAR AND COMBATANTS)
             r.setzDepth(Integer.MAX_VALUE);
+
+            if(m.placedACombatant()) {
+                r.drawText("End Battle", smallFont.getFontImage(), endBattleIcon.getX() - 16, toolbar.getY() + 2, Color.white);
+                r.drawImage(endBattleIcon);
+            }
+
             for (Building b : m.getDefendingVillage().getBuildings()) {
                 r.drawRect(b.getRect());
-                r.drawText(Float.toString(b.HP()), smallFont.getFontImage(), b.xPos(), b.yPos(), Color.black);
+                r.drawText(Float.toString(roundToDecimal(b.HP(),1)), smallFont.getFontImage(), b.xPos(), b.yPos(), Color.black);
             }
 
             for(Combatant c : m.getPlacedCombatants()) {
-                r.drawCircle(c.getCircle());
-                r.drawHollowCircle(new Circle(c.xPos(),c.yPos(),c.attackRadius(),Color.white));
+                if(c.HP() > 0) {
+                    r.drawCircle(c.getCircle());
+                    r.drawHollowCircle(new Circle(c.xPos(), c.yPos(), c.attackRadius(), Color.white));
+                    r.drawText(Float.toString(roundToDecimal(c.HP(),1)), smallFont.getFontImage(), c.xPos(), c.yPos(), Color.white);
+                }
             }
 
             if(selectedForAttackPlacement != null) {
@@ -257,6 +274,10 @@ public final class View {
         r.drawRect(toolbar); // DISPLAYING TOOLBAR
     }
 
+    private float roundToDecimal(float number, int decimal) {
+        return (float) (Math.round(number * Math.pow(10,decimal)) / Math.pow(10,decimal));
+    }
+
     private int countCombatants(ArrayList<Combatant> combatees, String name) {
         int count = 0;
         for (Combatant combatee : combatees) {
@@ -264,6 +285,22 @@ public final class View {
                 count++;
         }
         return count;
+    }
+
+    public Sound getDeployArcherSound() {
+        return deployArcher;
+    }
+
+    public Sound getDeployKnightSound() {
+        return deployKnight;
+    }
+
+    public Sound getDeploySoldierSound() {
+        return deploySoldier;
+    }
+
+    public Sound getDeployCatapultSound() {
+        return deployCatapult;
     }
 
     public Font getRegularFont() {
@@ -336,6 +373,10 @@ public final class View {
 
     public Rectangle getGoldMineSymbol() {
         return goldMineSymbol;
+    }
+
+    public Image getEndBattleIcon() {
+        return endBattleIcon;
     }
 
     public Rectangle getIronMineSymbol() {

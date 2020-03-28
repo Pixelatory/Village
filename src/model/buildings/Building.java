@@ -24,7 +24,6 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	protected Rectangle rect;
 	protected Rectangle upgradingRect;
 	protected boolean isUpgrading = false;
-	protected boolean isDestroyed = false;
 	protected boolean isMovable = true;
 	
 	/**
@@ -35,14 +34,6 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	public Building(int xPos, int yPos) {
 		this.hp = maxHP();
 		this.pos = new Position(xPos,yPos);
-	}
-
-	public void setDestroyed(boolean value) {
-		this.isDestroyed = value;
-	}
-
-	public boolean isDestroyed() {
-		return this.isDestroyed;
 	}
 	
 	/**
@@ -153,18 +144,18 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	 * @see engine.renderPrimitives.Rectangle
 	 */
 	public Rectangle getRect() {
-		if(!isUpgrading() && !isDestroyed())
+		if(!isUpgrading() && HP() > 0)
 			return rect;
-		else if (!isUpgrading() && isDestroyed()) {
-			Rectangle tmp = rect;
+		else if (!isUpgrading() && HP() <= 0) {
+			Rectangle tmp = new Rectangle(rect);
 			tmp.setColour(tmp.getColour().darker());
-			return new Rectangle(tmp);
-		} else if (isUpgrading() && !isDestroyed())
+			return tmp;
+		} else if (isUpgrading() && HP() > 0)
 			return upgradingRect;
-		else if (isUpgrading() && isDestroyed()) {
-			Rectangle tmp = upgradingRect;
+		else if (isUpgrading() && HP() <= 0) {
+			Rectangle tmp = new Rectangle(upgradingRect);
 			tmp.setColour(tmp.getColour().darker());
-			return new Rectangle(tmp);
+			return tmp;
 		}
 
 		return new Rectangle(0,0,10,10, Color.white);

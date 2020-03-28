@@ -12,4 +12,8 @@ public final class Gold extends Resource {
 	public Gold() {
 		this.quantity = 1000;
 	}
+
+	public Gold(int amount) {
+		this.quantity = amount;
+	}
 }

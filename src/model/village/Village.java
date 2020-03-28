@@ -9,12 +9,10 @@ import model.resources.Gold;
 import model.resources.Iron;
 import model.resources.Wood;
 import model.statics.ProductionFrequency;
-import utility.OnQueue;
 import utility.TimerTaskExt;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,6 +38,22 @@ public class Village extends Guard implements Construct {
 		iron = new Iron();
 		food = new Food();
 		combatees = new ArrayList<>();
+		underAttack = false;
+	}
+
+	public Village(Village village) {
+		buildings = (ArrayList<Building>) village.getBuildings().clone();
+		for(Building b : buildings) {
+			if(b.getName().equals("Village Hall")) {
+				hall = (VillageHall) b;
+				break;
+			}
+		}
+		gold = new Gold(village.getGold());
+		wood = new Wood(village.getWood());
+		iron = new Iron(village.getIron());
+		food = new Food(village.getFood());
+		combatees = (ArrayList<Combatant>) village.getCombatees().clone();
 		underAttack = false;
 	}
 		

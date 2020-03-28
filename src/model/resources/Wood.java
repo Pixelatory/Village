@@ -12,4 +12,8 @@ public final class Wood extends Resource {
 	public Wood() {
 		this.quantity = 1000;
 	}
+
+	public Wood(int amount) {
+		this.quantity = amount;
+	}
 }

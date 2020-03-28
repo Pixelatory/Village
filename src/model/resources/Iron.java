@@ -12,4 +12,8 @@ public final class Iron extends Resource {
 	public Iron() {
 		this.quantity = 1000;
 	}
+
+	public Iron(int amount) {
+		this.quantity = amount;
+	}
 }

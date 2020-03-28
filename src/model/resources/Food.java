@@ -7,4 +7,8 @@ public class Food extends Resource {
     public Food() {
         this.quantity = 1000;
     }
+
+    public Food(int amount) {
+        this.quantity = amount;
+    }
 }

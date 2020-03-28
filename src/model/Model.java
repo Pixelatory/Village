@@ -3,7 +3,6 @@ package model;
 import engine.GameContainer;
 import model.army.Combatant;
 import model.attack.Attack;
-import model.buildings.ArcherTower;
 import model.buildings.Building;
 import model.village.Village;
 
@@ -36,6 +35,8 @@ public class Model {
     private int mouseClickedX = 0;
     private int mouseClickedY = 0;
 
+    private boolean placedACombatant = false;
+
     private Attack attack = new Attack();
 
     public Model() {
@@ -50,6 +51,10 @@ public class Model {
     /*
         Setter/Getter functions
      */
+    public boolean placedACombatant() {
+        return placedACombatant;
+    }
+
     public boolean isUpgradeMode() {
         return upgradeMode;
     }
@@ -153,9 +158,9 @@ public class Model {
     }
 
     public void startAttack() {
-        Village villageTest = new Village();
-        villageTest.newConstruction(new ArcherTower(200,200));
-        attack.setDefendingVillage(villageTest);
+        //Village villageTest = new Village();
+        //villageTest.newConstruction(new ArcherTower(200,200));
+        attack.setDefendingVillage(new Village(village));
         attack.setAttackingVillage(village);
     }
 
@@ -163,10 +168,17 @@ public class Model {
         attack.clearAttackingVillage();
         attack.clearDefendingVillage();
         attack.clearPlacedCombatants();
+        placedACombatant = false;
+        selectedForAttackPlacement = null;
+        attackMode = false;
+        buildMode = false;
+        upgradeMode = false;
+        trainingMode = false;
     }
 
     public void placeCombatant(Combatant combatant) {
         attack.addPlacedCombatant(combatant);
+        placedACombatant = true;
     }
 
     public ArrayList<Combatant> getPlacedCombatants() {
