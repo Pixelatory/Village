@@ -3,6 +3,7 @@ package model;
 import engine.GameContainer;
 import model.army.Combatant;
 import model.attack.Attack;
+import model.buildings.ArcherTower;
 import model.buildings.Building;
 import model.village.Village;
 
@@ -152,13 +153,16 @@ public class Model {
     }
 
     public void startAttack() {
-        attack.setDefendingVillage(new Village());
+        Village villageTest = new Village();
+        villageTest.newConstruction(new ArcherTower(100,100));
+        attack.setDefendingVillage(villageTest);
         attack.setAttackingVillage(village);
     }
 
     public void endAttack() {
         attack.clearAttackingVillage();
         attack.clearDefendingVillage();
+        attack.clearPlacedCombatants();
     }
 
     public void placeCombatant(Combatant combatant) {

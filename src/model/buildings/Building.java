@@ -190,7 +190,8 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	public void takeDamage(float amount) {
 		if(this.hp - amount <= 0)
 			this.hp = 0;
-		this.hp -= amount;
+		else
+			this.hp -= amount;
 	}
 
 	public boolean isMovable() {

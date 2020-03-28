@@ -8,6 +8,7 @@ import model.Model;
 import model.army.*;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
+import utility.Position;
 import view.View;
 
 import java.awt.event.MouseEvent;
@@ -44,6 +45,51 @@ public final class Controller {
 
         if(imageTileRate > 23)
             imageTileRate = 0;
+
+        if(attackMode) {
+            // First, check if a building is in radius of a combatant, if so, then attack, otherwise move closer
+            // Secondly, check if a combatant is in radius of a building, if so, then attack
+
+            // First part:
+            for(Combatant c : model.getPlacedCombatants()) {
+                boolean didAttack = false;
+
+                for(Building b : model.getDefendingVillage().getBuildings()) { // check if a building is in attack radius of combatant
+                    System.out.println(b.getName() + " " + c.enemyInSight(b));
+                    if(c.enemyInSight(b)) {
+                        c.attack(b);
+                        didAttack = true;
+                        break;
+                    }
+                }
+
+                if(!didAttack) { // If this combatant didn't attack cause not in range, then move to closest building
+                    Position closestBuildingPosition = null;
+                    for(Building b : model.getDefendingVillage().getBuildings()) {
+                        int xPos = b.xPos() + (b.width() / 2);
+                        int yPos = b.yPos() + (b.height() / 2);
+
+                        if(closestBuildingPosition == null) {
+                            closestBuildingPosition = new Position(xPos,yPos);
+                        } else if (Math.hypot(xPos - c.xPos(), yPos - c.yPos()) <
+                                Math.hypot(closestBuildingPosition.getX() - c.xPos(), closestBuildingPosition.getY() - c.yPos())) {
+                            closestBuildingPosition = new Position(xPos,yPos);
+                        }
+                    }
+
+                    int xPos = closestBuildingPosition.getX();
+                    int yPos = closestBuildingPosition.getY();
+                    double angle = Math.toDegrees(Math.atan2(xPos - c.xPos(), yPos - c.yPos()));
+
+                    double movement = c.movementSpeed();
+
+                    double xMovement = movement * Math.toDegrees(Math.sin(Math.toRadians(angle)));
+
+                    System.out.println(xMovement);
+
+                }
+            }
+        }
 
         if(toolbar.isVisible()
         && rightClickUp(gc)) {
@@ -292,7 +338,7 @@ public final class Controller {
                 selectedForAttackPlacement.setYPos(mouseY);
                 return;
             }
-        }
+        } // CONTROLLING SELECTED FOR ATTACK PLACEMENT
 
         if(toolbar.isVisible()
         && !buildMode
@@ -330,8 +376,6 @@ public final class Controller {
             model.startAttack();
             return;
         } // CLICKING ON ATTACK BUTTON
-
-        System.out.println(mouseX + " " + mouseY);
     }
 
     private boolean mouseInBounds(int x, int y, int width, int height) {

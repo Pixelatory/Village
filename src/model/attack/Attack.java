@@ -70,6 +70,10 @@ public class Attack implements ComparedGenerator<Village> {
 		return placedCombatants;
 	}
 
+	public void clearPlacedCombatants() {
+		placedCombatants.clear();
+	}
+
 	public int attackScore() {
 		return attackScore;
 	}

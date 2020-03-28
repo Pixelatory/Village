@@ -53,7 +53,8 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 	public void takeDamage(float amount) {
 		if (this.hp - amount <= 0)
 			this.hp = 0;
-		this.hp -= amount;
+		else
+			this.hp -= amount;
 	}
 
 	public boolean enemyInSight(Building enemy) {
