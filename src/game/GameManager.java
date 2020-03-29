@@ -5,6 +5,8 @@ import engine.AbstractGame;
 import engine.GameContainer;
 import engine.Renderer;
 import model.Model;
+import model.village.Village;
+import utility.GameState;
 import view.View;
 
 /**
@@ -22,9 +24,16 @@ public class GameManager extends AbstractGame {
 	// Used for combatant training bar
 	
 	public GameManager() {
-		this.model = new Model();
+		Village village = GameState.load();
+		if(village == null) {
+			village = new Village();
+			this.model = new Model();
+		} else
+			this.model = new Model(village);
 		this.controller = new Controller();
 		this.view = new View();
+
+		GameState.save(village);
 	}
 	
 	float imageTileRate = 0;
