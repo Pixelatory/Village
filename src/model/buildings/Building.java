@@ -9,6 +9,7 @@ import utility.Area;
 import utility.Position;
 
 import java.awt.*;
+import java.io.Serializable;
 
 /**
  * General abstract class that encompasses everything a building should do/have.
@@ -16,7 +17,7 @@ import java.awt.*;
  * @author 6177000
  * @see ProductionBuilding
  */
-public abstract class Building implements Upgradable, Attackable, Generative, Movable {
+public abstract class Building implements Upgradable, Attackable, Generative, Movable, Serializable {
 	protected float hp;
 	protected int level = 1;
 	protected Position pos;

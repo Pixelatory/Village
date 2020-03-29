@@ -11,12 +11,13 @@ import model.resources.Wood;
 import model.statics.ProductionFrequency;
 import utility.TimerTaskExt;
 
+import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Village extends Guard implements Construct {
+public class Village extends Guard implements Construct, Serializable {
 	private ArrayList<Building> buildings;
 	private VillageHall hall;
 	private Gold gold;
@@ -27,7 +28,7 @@ public class Village extends Guard implements Construct {
 	private boolean underAttack;
 	private int combatantTimer = 0;
 	private boolean generatedVillage;
-	Timer timer = new Timer();
+	transient Timer timer = new Timer();
 	
 	public Village() {
 		buildings = new ArrayList<>();

@@ -5,6 +5,7 @@ import model.army.Combatant;
 import model.attack.Attack;
 import model.buildings.Building;
 import model.village.Village;
+import utility.GameState;
 
 import java.util.ArrayList;
 
@@ -41,6 +42,10 @@ public class Model {
 
     public Model() {
         village = new Village();
+    }
+
+    public Model(Village village) {
+        this.village = village;
     }
 
     public void update(GameContainer gc) {
