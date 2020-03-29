@@ -3,6 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/Village_jar</output-path>
     <root id="archive" name="Village.jar">
       <element id="module-output" name="Village" />
+      <element id="library" level="project" name="org.json:json:20190722" />
     </root>
   </artifact>
 </component>

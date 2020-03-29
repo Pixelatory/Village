@@ -1,56 +1,83 @@
 package utility;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import model.army.Combatant;
+import model.buildings.Building;
+import model.resources.Food;
+import model.resources.Gold;
+import model.resources.Iron;
+import model.resources.Wood;
 import model.village.Village;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class GameState {
     public static void save(Village village) {
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        JSONObject obj = new JSONObject();
+        obj.append("gold",village.getGold());
+        obj.append("iron",village.getIron());
+        obj.append("wood",village.getWood());
+        obj.append("food",village.getFood());
+        obj.append("buildings",village.getBuildings());
+        obj.append("combatees",village.getCombatees());
 
-            // Java object to JSON file
-            mapper.writerWithDefaultPrettyPrinter().writeValue(new File("okay.json"), village.getBuildings());
 
-            // Java objects to JSON string - pretty-print
-            String jsonInString2 = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(village);
+        //System.out.println(obj.toString());
 
-            //System.out.println("save" + jsonInString2);
+        ArrayList<Building> buildings;
+        JSONArray array = obj.getJSONArray("buildings");
+        buildings = (ArrayList<Building>) array.get(0);
+        for(Building b : buildings) {
+           // System.out.println(b.getName());
+        }
+
+        File file = new File("okay.json");
+
+        try(FileWriter fw = new FileWriter(file)) {
+            fw.write(obj.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public static Village load() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+        File file = new File("okay.json");
+        JSONObject obj = null;
 
-        try {
-            // JSON file to Java object
-            Village village = mapper.readValue(new File("okay.json"), Village.class);
-
-            // pretty print
-            String prettyStaff1 = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(village);
-
-            System.out.println("load" + prettyStaff1);
-
-            return village;
-
-        } catch (JsonGenerationException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
+        try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String str = new String(Files.readAllBytes(file.toPath()));
+            obj = new JSONObject(str);
+        } catch (FileNotFoundException e) {
+            System.err.println("village save file not found.");
         } catch (IOException e) {
+            System.err.println("Cannot read village save file");
             e.printStackTrace();
         }
+
+        Gold gold;
+        Iron iron;
+        Wood wood;
+        Food food;
+        ArrayList<Building> buildings;
+        ArrayList<Combatant> combatants;
+        if(obj != null) {
+            System.out.println(obj.get("gold").toString());
+            gold = new Gold((Integer) obj.getJSONArray("gold").get(0));
+            iron = new Iron((Integer) obj.getJSONArray("iron").get(0));
+            wood = new Wood((Integer) obj.getJSONArray("wood").get(0));
+            food = new Food((Integer) obj.getJSONArray("food").get(0));
+
+            JSONArray buildingsArray = obj.getJSONArray("buildings");
+            for(int i=0;i<buildingsArray.length();i++) {
+                System.out.println(buildingsArray.getJSONObject(0).get("name").toString());
+            }
+            System.out.println(gold.getQuantity());
+            System.out.println(obj.toString());
+        }
+
         return null;
     }
 

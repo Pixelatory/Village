@@ -19,43 +19,40 @@ import java.util.TimerTask;
 
 public class Village extends Guard implements Construct, Serializable {
 	private ArrayList<Building> buildings;
-	private VillageHall hall;
 	private Gold gold;
 	private Iron iron;
 	private Wood wood;
 	private Food food;
 	private ArrayList<Combatant> combatees;
-	private boolean underAttack;
 	private int combatantTimer = 0;
-	private boolean generatedVillage;
-	transient Timer timer = new Timer();
+	private Timer timer = new Timer();
 	
 	public Village() {
 		buildings = new ArrayList<>();
-		hall = new VillageHall(100, 100);
-		buildings.add(hall);
+		buildings.add(new VillageHall(100,100));
 		gold = new Gold();
 		wood = new Wood();
 		iron = new Iron();
 		food = new Food();
 		combatees = new ArrayList<>();
-		underAttack = false;
 	}
 
 	public Village(Village village) {
 		buildings = (ArrayList<Building>) village.getBuildings().clone();
-		for(Building b : buildings) {
-			if(b.getName().equals("Village Hall")) {
-				hall = (VillageHall) b;
-				break;
-			}
-		}
 		gold = new Gold(village.getGold());
 		wood = new Wood(village.getWood());
 		iron = new Iron(village.getIron());
 		food = new Food(village.getFood());
 		combatees = (ArrayList<Combatant>) village.getCombatees().clone();
-		underAttack = false;
+	}
+
+	public Village(Gold gold, Wood wood, Iron iron, Food food, ArrayList<Building> buildings, ArrayList<Combatant> combatees) {
+		this.gold = gold;
+		this.wood = wood;
+		this.iron = iron;
+		this.food = food;
+		this.buildings = buildings;
+		this.combatees = combatees;
 	}
 		
 	public boolean canConstruct(Building building) {
@@ -246,22 +243,10 @@ public class Village extends Guard implements Construct, Serializable {
 		return combatees.size();
 	}
 	
-	public int areaUsed() {
-		return 0;
-	}
-	public int maxPopSize() {
-		return 0;
-	}
 	public int numOfBuildings() {
 		return buildings.size();
 	}
-	public boolean isUnderAttack() {
-		return underAttack;
-	}
-	public int maxLootRaidable() {
-		return 0;
-	}
-	
+
 	public ArrayList<Building> getBuildings() {
 		return buildings;
 	}
@@ -281,16 +266,7 @@ public class Village extends Guard implements Construct, Serializable {
 		}
 		return null;
 	}
-	
-	// used for generating model.village (since the model.village should be similar level to the attacker's level)
-	public double avgBuildingLevel() {
-		return 0;
-	}
-	
-	public double avgHabitantLevel() {
-		return 0;
-	}
-	
+
 	@Override
 	public Duration guardDuration() {
 		// TODO Add guard duration
