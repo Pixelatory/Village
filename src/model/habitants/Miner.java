@@ -10,5 +10,7 @@ package model.habitants;
  *
  */
 public abstract class Miner extends ProductionHabitant {
-
+    public Miner() {
+        super();
+    }
 }

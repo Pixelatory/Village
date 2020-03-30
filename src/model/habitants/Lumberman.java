@@ -13,6 +13,10 @@ import model.statics.UpgradeTimes;
  *
  */
 public final class Lumberman extends ProductionHabitant {
+	public Lumberman() {
+		super();
+		this.name = "Lumberman";
+	}
 
 	@Override
 	public int maxLevel() {

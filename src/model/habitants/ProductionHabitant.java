@@ -1,5 +1,7 @@
 package model.habitants;
 
+import java.io.Serializable;
+
 /**
  * An abstract class which encompasses everything a habitant that is in production needs to function.
  * 
@@ -7,6 +9,10 @@ package model.habitants;
  * @see Habitant
  */
 public abstract class ProductionHabitant extends Habitant {
+	public ProductionHabitant() {
+		super();
+	}
+
 	/**
 	 * A getter function which returns how much resource this habitant generates per cycle.
 	 * 

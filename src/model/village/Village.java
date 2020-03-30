@@ -9,7 +9,7 @@ import model.resources.Gold;
 import model.resources.Iron;
 import model.resources.Wood;
 import model.statics.ProductionFrequency;
-import utility.TimerTaskExt;
+import utility.timers.*;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -73,28 +73,12 @@ public class Village extends Guard implements Construct, Serializable {
 			if(building instanceof ProductionBuilding) {
 				@SuppressWarnings("rawtypes")
 				ProductionBuilding tmp = (ProductionBuilding) building;
-				timer.scheduleAtFixedRate(new TimerTaskExt(tmp, gold, iron, wood, food) {
-					@Override
-					public void run() {
-						if(tmp instanceof GoldMine)
-							gold.increase(tmp.productionAmount());
-						else if (tmp instanceof IronMine)
-							iron.increase(tmp.productionAmount());
-						else if (tmp instanceof LumberMill)
-							wood.increase(tmp.productionAmount());
-						else if (tmp instanceof Farm)
-							food.increase(tmp.productionAmount());
-					}
-				}, ProductionFrequency.time * 1000, ProductionFrequency.time * 1000);
+				timer.scheduleAtFixedRate(new ProductionBuildingCollectionTimer(tmp, gold, iron, wood, food, this)
+						, ProductionFrequency.time * 1000, ProductionFrequency.time * 1000);
 			}
 
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					new Sound("/sounds/building_finished.wav").play();
-					building.setUpgrading(false);
-				}
-			}, building.upgradeTime(building.level())*1000);
+			timer.schedule(new ConstructionTimer(building,this),
+					building.upgradeTime(building.level())*1000);
 		}
 	} // Creating a new construction project (new building)
 	
@@ -111,13 +95,8 @@ public class Village extends Guard implements Construct, Serializable {
 			gold.decrease(combatant.goldCost(combatant.level()));
 			wood.decrease(combatant.woodCost(combatant.level()));
 			combatantTimer += combatant.upgradeTime(combatant.level()) * 1000;
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					new Sound("/sounds/building_finished.wav").play();
-					combatees.add(combatant);
-				}
-			}, combatantTimer);
+			timer.schedule(new CombatantTrainingTimer(combatant,this)
+					, combatantTimer);
 		}
 	} // Creating a new individual in the village (new combatant)
 	
@@ -144,14 +123,8 @@ public class Village extends Guard implements Construct, Serializable {
 			gold.decrease(h.goldCost(h.level()));
 			building.setTraining(true);
 			
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					new Sound("/sounds/building_finished.wav").play();
-					building.addWorker();
-					building.setTraining(false);
-				}
-			}, h.upgradeTime(h.level()) * 1000);
+			timer.schedule(new WorkerTrainingTimer(building,this),
+					h.upgradeTime(h.level()) * 1000);
 		}
 	}
 	
@@ -177,14 +150,8 @@ public class Village extends Guard implements Construct, Serializable {
 			wood.decrease(building.woodCost(building.level()));
 			building.setUpgrading(true);
 			
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					new Sound("/sounds/building_finished.wav").play();
-					building.performUpgrade();
-					building.setUpgrading(false);
-				}
-			}, building.upgradeTime(building.level())*1000);
+			timer.schedule(new UpgradeBuildingTimer(building,this),
+					building.upgradeTime(building.level())*1000);
 		}
 	}
 	
@@ -209,14 +176,8 @@ public class Village extends Guard implements Construct, Serializable {
 			gold.decrease(h.goldCost(h.level() + 1));
 			building.setTraining(true);
 			
-			timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					new Sound("/sounds/building_finished.wav").play();
-					h.performUpgrade();
-					building.setTraining(false);
-				}
-			}, h.upgradeTime(h.level() + 1) * 1000);
+			timer.schedule(new UpgradeProductionHabitantTimer(building,h,this),
+					h.upgradeTime(h.level() + 1) * 1000);
 		}
 	}
 

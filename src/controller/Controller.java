@@ -8,7 +8,8 @@ import model.Model;
 import model.army.*;
 import model.buildings.*;
 import model.habitants.ProductionHabitant;
-import utility.AttackTimerTask;
+import utility.timers.AttackTimerTask;
+import utility.GameState;
 import utility.Position;
 import view.View;
 
@@ -150,6 +151,7 @@ public final class Controller {
                 model.setMouseClickedX(mouseX - b.xPos());
                 model.setMouseClickedY(mouseY - b.yPos());
                 view.getClickSound().play();
+                GameState.save(model.getVillage());
                 return;
             }
         } // CLICKING ON A BUILDING ON SCREEN
@@ -170,18 +172,21 @@ public final class Controller {
             if(mouseInBounds(view.getUpgradeIcon())) {
                 view.getClickSound().play();
                 model.getVillage().performUpgrade(selectedForUpgrade);
+                GameState.save(model.getVillage());
                 return;
             } // CLICKING UPGRADE BUTTON
             else if (selectedForUpgrade instanceof ProductionBuilding
                     && mouseInBounds(view.getTrainIcon())) {
                 view.getClickSound().play();
                 model.getVillage().trainIndividual((ProductionBuilding<ProductionHabitant>) selectedForUpgrade);
+                GameState.save(model.getVillage());
                 return;
             } // CLICKING TRAIN BUTTON (FOR PRODUCTION BUILDINGS)
             else if (selectedForUpgrade instanceof ProductionBuilding
                     && mouseInBounds(view.getUpgradeTroopIcon())) {
                 view.getClickSound().play();
                 model.getVillage().performUpgradeHabitant((ProductionBuilding) selectedForUpgrade);
+                GameState.save(model.getVillage());
                 return;
             } // CLICKING UPGRADE WORKER BUTTON (FOR PRODUCTION BUILDINGS)
         } // UPGRADE MODE
@@ -193,18 +198,22 @@ public final class Controller {
         && mouseX - mouseClickedX + selectedForUpgrade.width() <= GameContainer.getWidth()
         && upgradeMode
         && !attackMode
-        && holdingLeftClick(gc)
         && !mouseInBounds(toolbar)) {
 
-            boolean overlap = false;
-            for(Building b : model.getVillage().getBuildings()) {
-                overlap = overlap(b,selectedForUpgrade);
+            if(holdingLeftClick(gc)) {
+                boolean overlap = false;
+                for (Building b : model.getVillage().getBuildings()) {
+                    overlap = overlap(b, selectedForUpgrade);
+                }
+                if (!overlap) {
+                    selectedForUpgrade.setXPos(mouseX - mouseClickedX);
+                    selectedForUpgrade.setYPos(mouseY - mouseClickedY);
+                }
+                return;
+            } else if(leftClickUp(gc)) {
+                GameState.save(model.getVillage());
+                return;
             }
-            if(!overlap) {
-                selectedForUpgrade.setXPos(mouseX - mouseClickedX);
-                selectedForUpgrade.setYPos(mouseY - mouseClickedY);
-            }
-            return;
         } // HOLDING LEFT CLICK (AND DRAGGING) ON BUILDING AFTER SELECTING IT
 
         if(selectedNewConstruction != null) { // BUILD MODE, AND BUILDING WAS ALREADY SELECTED
@@ -218,6 +227,7 @@ public final class Controller {
                 model.getVillage().newConstruction(selectedNewConstruction);
                 model.setSelectedNewConstruction(null);
                 toolbar.setVisible(true);
+                GameState.save(model.getVillage());
                 return;
             } else { // JUST FOR MOVING THE BUILDING AFTER SELECTING IT FOR CONSTRUCTION
                 selectedNewConstruction.setXPos(mouseX - selectedNewConstruction.height() / 2);
@@ -292,21 +302,25 @@ public final class Controller {
         && leftClickUp(gc)) {
             if(mouseInBounds(view.getArcherSymbol())) {
                 model.getVillage().newIndividual(new Archer(0,0));
+                GameState.save(model.getVillage());
                 return;
             }
 
             if(mouseInBounds(view.getSoldierSymbol())) {
                 model.getVillage().newIndividual(new Soldier(0,0));
+                GameState.save(model.getVillage());
                 return;
             }
 
             if(mouseInBounds(view.getCatapultSymbol())) {
                 model.getVillage().newIndividual(new Catapult(0,0));
+                GameState.save(model.getVillage());
                 return;
             }
 
             if(mouseInBounds(view.getKnightSymbol())) {
                 model.getVillage().newIndividual(new Knight(0,0));
+                GameState.save(model.getVillage());
                 return;
             }
         } // COMBATANT TRAINING TOOLBAR
@@ -383,8 +397,8 @@ public final class Controller {
                 if(model.getSelectedForAttackPlacement() == placedCombatant)
                     model.setSelectedForAttackPlacement(null);
 
-
                 view.getClickSound().play();
+                GameState.save(model.getVillage());
                 return;
             } else if (rightClickUp(gc)) {
                 model.setSelectedForAttackPlacement(null);
@@ -402,6 +416,7 @@ public final class Controller {
         && mouseInBounds(view.getEndBattleIcon())
         && leftClickUp(gc)) {
             model.endAttack();
+            GameState.save(model.getVillage());
             view.getClickSound().play();
         }
 

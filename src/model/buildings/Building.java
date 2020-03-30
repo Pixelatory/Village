@@ -62,6 +62,10 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	public int level() {
 		return level;
 	}
+
+	public int getLevel() {
+		return level;
+	}
 	
 	/**
 	 * A getter function which returns the height of a Building.
@@ -169,6 +173,7 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	 */
 	public void setLevel(int level) {
 		this.level = level;
+		this.hp = maxHP();
 	}
 	
 	public boolean isUpgrading() {

@@ -13,7 +13,12 @@ import model.statics.UpgradeTimes;
  *
  */
 public final class GoldMiner extends Miner {
-	
+
+	public GoldMiner() {
+		super();
+		this.name = "Gold Miner";
+	}
+
 	@Override
 	public int maxLevel() {
 		return MaxLevels.GOLD_MINER;

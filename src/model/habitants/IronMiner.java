@@ -13,6 +13,11 @@ import model.statics.UpgradeTimes;
  *
  */
 public final class IronMiner extends Miner {
+
+	public IronMiner() {
+		super();
+		this.name = "Iron Miner";
+	}
 	
 	@Override
 	public int maxLevel() {

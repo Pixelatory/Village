@@ -19,7 +19,10 @@ public class Attack implements ComparedGenerator<Village> {
 	private Village attackingVillage;
 	private Village defendingVillage;
 	private int attackScore;
-	private int lootGained;
+	private int originalWoodQuantity;
+	private int originalIronQuantity;
+	private int originalGoldQuantity;
+	private int originalFoodQuantity;
 	private ArrayList<Combatant> placedCombatants = new ArrayList<>();
 
 	/**
@@ -52,6 +55,11 @@ public class Attack implements ComparedGenerator<Village> {
 		for(Building b : village.getBuildings())
 			b.setMovable(false);
 		this.defendingVillage = village;
+
+		originalWoodQuantity = village.getWood();
+		originalFoodQuantity = village.getFood();
+		originalGoldQuantity = village.getGold();
+		originalIronQuantity = village.getIron();
 	}
 
 	public void clearDefendingVillage() {
@@ -60,6 +68,11 @@ public class Attack implements ComparedGenerator<Village> {
 				b.setMovable(true);
 			this.defendingVillage = null;
 		}
+
+		originalIronQuantity = 0;
+		originalGoldQuantity = 0;
+		originalFoodQuantity = 0;
+		originalWoodQuantity = 0;
 	}
 
 	public void addPlacedCombatant(Combatant combatant) {
@@ -75,10 +88,22 @@ public class Attack implements ComparedGenerator<Village> {
 	}
 
 	public int attackScore() {
-		return attackScore;
+		return 0;
 	}
 
-	public int lootGained() {
-		return lootGained;
+	public int woodGained() {
+		return defendingVillage.getWood() - originalWoodQuantity;
+	}
+
+	public int goldGained() {
+		return defendingVillage.getGold() - originalGoldQuantity;
+	}
+
+	public int foodGained() {
+		return defendingVillage.getFood() - originalFoodQuantity;
+	}
+
+	public int ironGained() {
+		return defendingVillage.getIron() - originalIronQuantity;
 	}
 }

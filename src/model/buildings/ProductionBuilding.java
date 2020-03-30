@@ -1,5 +1,6 @@
 package model.buildings;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import engine.renderPrimitives.Rectangle;
@@ -15,9 +16,9 @@ import model.habitants.ProductionHabitant;
  * @see MiningProduction
  * @see FoodProduction
  */
-public abstract class ProductionBuilding<E extends ProductionHabitant> extends Building {
-	
-	protected ArrayList<E> workers;
+public abstract class ProductionBuilding<E extends ProductionHabitant> extends Building implements Serializable {
+
+	protected ArrayList<E> workers = new ArrayList<>();
 	protected boolean isTraining = false;
 	
 	/**
@@ -29,7 +30,6 @@ public abstract class ProductionBuilding<E extends ProductionHabitant> extends B
 	 */
 	public ProductionBuilding(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.workers = new ArrayList<E>();
 	}
 
 	/**
@@ -138,7 +138,6 @@ public abstract class ProductionBuilding<E extends ProductionHabitant> extends B
 		}
 		return sum;
 	}
-
 	
 	/**
 	 * A function which returns if this production building is currently training a new worker.
@@ -156,5 +155,13 @@ public abstract class ProductionBuilding<E extends ProductionHabitant> extends B
 	 */
 	public void setTraining(boolean isTraining) {
 		this.isTraining = isTraining;
+	}
+
+	public ArrayList<E> getWorkers() {
+		return workers;
+	}
+
+	public void setWorkers(ArrayList<E> workers) {
+		this.workers = workers;
 	}
 }

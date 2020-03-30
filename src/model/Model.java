@@ -186,6 +186,26 @@ public class Model {
         placedACombatant = true;
     }
 
+    public int getAttackScore() {
+        return attack.attackScore();
+    }
+
+    public int getAttackWoodGained() {
+        return attack.woodGained();
+    }
+
+    public int getAttackIronGained() {
+        return attack.ironGained();
+    }
+
+    public int getAttackFoodGained() {
+        return attack.foodGained();
+    }
+
+    public int getAttackGoldGained() {
+        return attack.goldGained();
+    }
+
     public ArrayList<Combatant> getPlacedCombatants() {
         return attack.getPlacedCombatants();
     }

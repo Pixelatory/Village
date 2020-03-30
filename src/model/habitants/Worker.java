@@ -14,6 +14,11 @@ import model.statics.UpgradeTimes;
  */
 public final class Worker extends ProductionHabitant {
 
+	public Worker() {
+		super();
+		this.name = "Worker";
+	}
+
 	@Override
 	public int productionAmount() {
 		return ProductionAmounts.WORKER[level() - 1];

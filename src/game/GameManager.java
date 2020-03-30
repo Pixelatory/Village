@@ -5,6 +5,7 @@ import engine.AbstractGame;
 import engine.GameContainer;
 import engine.Renderer;
 import model.Model;
+import model.army.Archer;
 import model.buildings.ArcherTower;
 import model.village.Village;
 import utility.GameState;
@@ -28,7 +29,6 @@ public class GameManager extends AbstractGame {
 		Village village = GameState.load();
 		if(village == null) {
 			village = new Village();
-			village.newConstruction(new ArcherTower(0,0));
 			this.model = new Model(village);
 		} else
 			this.model = new Model(village);

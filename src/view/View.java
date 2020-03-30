@@ -262,6 +262,9 @@ public final class View {
                 r.drawCircle(catapultSymbol);
                 r.drawText(Integer.toString(catapult), smallFont.getFontImage(), catapultSymbol.getX(), catapultSymbol.getY(), Color.white);
             }
+
+            r.drawText("Attack Score: " + m.getAttackScore(), smallFont.getFontImage(), catapultSymbol.getX() + 35, toolbar.getY() + 2, Color.white);
+            r.drawText("Wood Gained: " + m.getL);
         }
 
 
