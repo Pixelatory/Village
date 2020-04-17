@@ -1,11 +1,9 @@
 package model;
 
-import engine.GameContainer;
 import model.army.Combatant;
 import model.attack.Attack;
 import model.buildings.Building;
 import model.village.Village;
-import utility.GameState;
 
 import java.util.ArrayList;
 
@@ -46,11 +44,6 @@ public class Model {
 
     public Model(Village village) {
         this.village = village;
-    }
-
-    public void update(GameContainer gc) {
-        mouseX = gc.getInput().getMouseX();
-        mouseY = gc.getInput().getMouseY();
     }
 
     /*
@@ -150,10 +143,6 @@ public class Model {
         attackMode = value;
     }
 
-    public boolean isUnderAttack() {
-        return attack.getAttackingVillage() != null && attack.getDefendingVillage() != null;
-    }
-
     public Village getAttackingVillage() {
         return attack.getAttackingVillage();
     }
@@ -163,8 +152,6 @@ public class Model {
     }
 
     public void startAttack() {
-        //Village villageTest = new Village();
-        //villageTest.newConstruction(new ArcherTower(200,200));
         attack.setDefendingVillage(new Village(village));
         attack.setAttackingVillage(village);
     }
@@ -196,10 +183,6 @@ public class Model {
 
     public int getAttackIronGained() {
         return attack.ironGained();
-    }
-
-    public int getAttackFoodGained() {
-        return attack.foodGained();
     }
 
     public int getAttackGoldGained() {

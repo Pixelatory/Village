@@ -5,8 +5,6 @@ import engine.AbstractGame;
 import engine.GameContainer;
 import engine.Renderer;
 import model.Model;
-import model.army.Archer;
-import model.buildings.ArcherTower;
 import model.village.Village;
 import utility.GameState;
 import view.View;
@@ -45,7 +43,6 @@ public class GameManager extends AbstractGame {
 	 */
 	@Override
 	public void update(GameContainer gc, float dt) {
-		model.update(gc);
 		controller.update(gc,model,view,dt);
 	}
 

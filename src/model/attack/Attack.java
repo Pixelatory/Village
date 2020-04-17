@@ -18,11 +18,9 @@ import java.util.ArrayList;
 public class Attack implements ComparedGenerator<Village> {
 	private Village attackingVillage;
 	private Village defendingVillage;
-	private int attackScore;
 	private int originalWoodQuantity;
 	private int originalIronQuantity;
 	private int originalGoldQuantity;
-	private int originalFoodQuantity;
 	private ArrayList<Combatant> placedCombatants = new ArrayList<>();
 
 	/**
@@ -57,7 +55,6 @@ public class Attack implements ComparedGenerator<Village> {
 		this.defendingVillage = village;
 
 		originalWoodQuantity = village.getWood();
-		originalFoodQuantity = village.getFood();
 		originalGoldQuantity = village.getGold();
 		originalIronQuantity = village.getIron();
 	}
@@ -71,7 +68,6 @@ public class Attack implements ComparedGenerator<Village> {
 
 		originalIronQuantity = 0;
 		originalGoldQuantity = 0;
-		originalFoodQuantity = 0;
 		originalWoodQuantity = 0;
 	}
 
@@ -88,7 +84,14 @@ public class Attack implements ComparedGenerator<Village> {
 	}
 
 	public int attackScore() {
-		return 0;
+		int count = 0;
+
+		for(Building b : defendingVillage.getBuildings()) {
+			if(b.HP() == 0)
+				count++;
+		}
+
+		return count / defendingVillage.getBuildings().size();
 	}
 
 	public int woodGained() {
@@ -97,10 +100,6 @@ public class Attack implements ComparedGenerator<Village> {
 
 	public int goldGained() {
 		return defendingVillage.getGold() - originalGoldQuantity;
-	}
-
-	public int foodGained() {
-		return defendingVillage.getFood() - originalFoodQuantity;
 	}
 
 	public int ironGained() {

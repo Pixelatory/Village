@@ -34,7 +34,7 @@ public class GameState {
         obj.append("buildings",village.getBuildings());
         obj.append("combatees",village.getCombatees());
 
-        File file = new File("okay.json");
+        File file = new File("save.json");
 
         try(FileWriter fw = new FileWriter(file)) {
             fw.write(obj.toString());
@@ -44,7 +44,7 @@ public class GameState {
     }
 
     public static Village load() {
-        File file = new File("okay.json");
+        File file = new File("save.json");
         JSONObject obj = null;
 
         try {
@@ -99,7 +99,6 @@ public class GameState {
                     case "Iron Mine":
                         IronMine ironMine = new IronMine(xPos,yPos);
                         ironMine.setLevel(level);
-                        buildings.add(ironMine);
 
                         ArrayList<IronMiner> ironWorkers = new ArrayList<>();
 

@@ -145,7 +145,10 @@ public final class View {
                 r.drawImage(upgradeTroopIcon);
                 r.drawText("Upgrade", smallFont.getFontImage(), toolbar.getX() + 135, toolbar.getY(), Color.white);
 
-                r.drawText(selectedForUpgrade.getName(), smallFont.getFontImage(), toolbar.getX() + 200, toolbar.getY(), Color.white);
+                if(selectedForUpgrade.level() < selectedForUpgrade.maxLevel())
+                    r.drawText(selectedForUpgrade.getName() + " (Level: " + selectedForUpgrade.getLevel() + ")", smallFont.getFontImage(), toolbar.getX() + 200, toolbar.getY(), Color.white);
+                else
+                    r.drawText(selectedForUpgrade.getName() + " (Level: MAX)", smallFont.getFontImage(), toolbar.getX() + 200, toolbar.getY(), Color.white);
 
                 if(b.numOfWorkers() < b.workerCapacity())
                     r.drawText("Workers: " + b.numOfWorkers(), smallFont.getFontImage(), toolbar.getX() + 200, toolbar.getY() + 12, Color.white);
@@ -169,7 +172,13 @@ public final class View {
                 if(selectedForUpgrade instanceof DefensiveBuilding) {
                     r.drawHollowCircle(new Circle(selectedForUpgrade.xPos() + (selectedForUpgrade.width() / 2),selectedForUpgrade.yPos() + (selectedForUpgrade.height() / 2),((DefensiveBuilding) selectedForUpgrade).attackRadius(),Color.white));
                 }
-                r.drawText(selectedForUpgrade.getName(), smallFont.getFontImage(), toolbar.getX() + 75, toolbar.getY(), Color.white);
+                if(selectedForUpgrade.getLevel() < selectedForUpgrade.maxLevel())
+                    r.drawText(selectedForUpgrade.getName() + " (Level: " + selectedForUpgrade.getLevel() + ")", smallFont.getFontImage(), toolbar.getX() + 75, toolbar.getY(), Color.white);
+                else
+                    r.drawText(selectedForUpgrade.getName() + " (Level: MAX)", smallFont.getFontImage(), toolbar.getX() + 75, toolbar.getY(), Color.white);
+
+                if(selectedForUpgrade.isUpgrading())
+                    r.drawText("Upgrading building...", smallFont.getFontImage(), toolbar.getX() + 75, toolbar.getY() + 12, Color.white);
             }
         }
 
@@ -264,9 +273,10 @@ public final class View {
             }
 
             r.drawText("Attack Score: " + m.getAttackScore(), smallFont.getFontImage(), catapultSymbol.getX() + 35, toolbar.getY() + 2, Color.white);
-            r.drawText("Wood Gained: " + m.getL);
+            r.drawText("Gold Gained: " + m.getAttackGoldGained(), smallFont.getFontImage(), catapultSymbol.getX() + 35, toolbar.getY() + 14, Color.white);
+            r.drawText("Iron Gained: " + m.getAttackIronGained(), smallFont.getFontImage(), catapultSymbol.getX() + 35, toolbar.getY() + 26, Color.white);
+            r.drawText("Wood Gained: " + m.getAttackWoodGained(), smallFont.getFontImage(), catapultSymbol.getX() + 35, toolbar.getY() + 38, Color.white);
         }
-
 
         r.setzDepth(Integer.MAX_VALUE); // DISPLAYING RESOURCE COUNTS
         r.drawText("Gold: " + village.getGold(), regularFont.getFontImage(), 0, 15, Color.WHITE);

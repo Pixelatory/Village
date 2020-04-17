@@ -35,8 +35,8 @@ public final class Controller {
         Building selectedNewConstruction = model.getSelectedNewConstruction();
         Combatant selectedForAttackPlacement = model.getSelectedForAttackPlacement();
         Rectangle toolbar = view.getToolbar();
-        mouseX = model.getMouseX();
-        mouseY = model.getMouseY();
+        mouseX = gc.getInput().getMouseX();
+        mouseY = gc.getInput().getMouseY();
         mouseClickedX = model.getMouseClickedX();
         mouseClickedY = model.getMouseClickedY();
 
@@ -45,10 +45,10 @@ public final class Controller {
 			sound.play();
 		}*/
 
-        imageTileRate += dt * 50;
+        /*imageTileRate += dt * 50;
 
         if(imageTileRate > 23)
-            imageTileRate = 0;
+            imageTileRate = 0;*/
 
         if(attackMode) {
             // First, check if a building is in radius of a combatant, if so, then attack, otherwise move closer
