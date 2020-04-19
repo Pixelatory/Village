@@ -8,30 +8,29 @@ import utility.GameState;
 
 import java.util.TimerTask;
 
-public class WorkerTrainingTimer extends TimerTask {
-
+public class WorkerUpgradeTimer extends TimerTask {
     ProductionBuilding building;
+    ProductionHabitant habitant;
     Village village;
-    ProductionHabitant productionHabitant;
 
-    public WorkerTrainingTimer(Village village, ProductionBuilding building, ProductionHabitant productionHabitant) {
+    public WorkerUpgradeTimer(Village village, ProductionBuilding building, ProductionHabitant habitant) {
         this.building = building;
+        this.habitant = habitant;
         this.village = village;
-        this.productionHabitant = productionHabitant;
     }
 
     @Override
     public void run() {
-        int upgradeTime = productionHabitant.getUpgradeTime();
+        int upgradeTime = habitant.getUpgradeTime();
         if (upgradeTime > 0) {
-            productionHabitant.setUpgradeTime(upgradeTime - 1);
+            habitant.setUpgradeTime(upgradeTime - 1);
         } else {
             new Sound("/sounds/building_finished.wav").play();
-            productionHabitant.setUpgrading(false);
+            habitant.setUpgrading(false);
             building.setTraining(false);
-            building.addWorker();
+            habitant.performUpgrade();
             GameState.save(village);
-            cancel(); // worker was successfully trained to close the task
+            cancel(); // building was successfully upgraded so cancel.
         }
     }
 }

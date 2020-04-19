@@ -29,7 +29,8 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 	protected boolean canAttack = true;
 	protected String name;
 	protected boolean isPlaced = false;
-	
+	private int upgradeTime;
+
 	/**
 	 * Sets the initial hp and position values.
 	 * 
@@ -42,6 +43,14 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 	public Combatant(int xPos, int yPos) {
 		this.hp = maxHP();
 		this.pos = new Position(xPos,yPos);
+	}
+
+	public int getUpgradeTime() {
+		return upgradeTime;
+	}
+
+	public void setUpgradeTime(int upgradeTime) {
+		this.upgradeTime = upgradeTime;
 	}
 
 	public Circle getCircle() {

@@ -1,7 +1,5 @@
 package model.habitants;
 
-import java.io.Serializable;
-
 /**
  * An abstract class which encompasses everything a habitant that is in production needs to function.
  * 
@@ -9,8 +7,27 @@ import java.io.Serializable;
  * @see Habitant
  */
 public abstract class ProductionHabitant extends Habitant {
+	private int upgradeTime;
+	private boolean isUpgrading = false;
+
 	public ProductionHabitant() {
 		super();
+	}
+
+	public int getUpgradeTime() {
+		return upgradeTime;
+	}
+
+	public void setUpgradeTime(int upgradeTime) {
+		this.upgradeTime = upgradeTime;
+	}
+
+	public boolean isUpgrading() {
+		return isUpgrading;
+	}
+
+	public void setUpgrading(boolean upgrading) {
+		isUpgrading = upgrading;
 	}
 
 	/**

@@ -1,30 +1,31 @@
 package utility.timers;
 
 import engine.audio.Sound;
-import model.army.Combatant;
+import model.buildings.Building;
 import model.village.Village;
 import utility.GameState;
 
 import java.util.TimerTask;
 
-public class CombatantTrainingTimer extends TimerTask {
+public class BuildingUpgradeTimer extends TimerTask {
 
-    Combatant combatant;
-    Village village;
+    private Village village;
+    private Building building;
 
-    public CombatantTrainingTimer(Village village, Combatant combatant) {
-        this.combatant = combatant;
+    public BuildingUpgradeTimer(Village village, Building building) {
         this.village = village;
+        this.building = building;
     }
 
     @Override
     public void run() {
-        int upgradeTime = combatant.getUpgradeTime();
+        int upgradeTime = building.getUpgradeTime();
         if (upgradeTime > 0) {
-            combatant.setUpgradeTime(upgradeTime - 1);
+            building.setUpgradeTime(upgradeTime - 1);
         } else {
             new Sound("/sounds/building_finished.wav").play();
-            combatant.setUpgrading(false);
+            building.setUpgrading(false);
+            building.performUpgrade();
             GameState.save(village);
             cancel(); // building was successfully upgraded so cancel.
         }

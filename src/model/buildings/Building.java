@@ -26,6 +26,7 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	protected Rectangle upgradingRect;
 	protected boolean isUpgrading = false;
 	protected boolean isMovable = true;
+	protected int upgradeTime;
 	
 	/**
 	 * A function which sets the initial hp value, and position of the newly created Building.
@@ -197,5 +198,13 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 
 	public void setMovable(boolean value) {
 		this.isMovable = value;
+	}
+
+	public void setUpgradeTime(int timeLeft) {
+		this.upgradeTime = timeLeft;
+	}
+
+	public int getUpgradeTime() {
+		return upgradeTime;
 	}
 }

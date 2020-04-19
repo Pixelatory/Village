@@ -2,7 +2,9 @@ package model.village;
 
 import engine.audio.Sound;
 import model.army.Combatant;
-import model.buildings.*;
+import model.buildings.Building;
+import model.buildings.ProductionBuilding;
+import model.buildings.VillageHall;
 import model.habitants.ProductionHabitant;
 import model.resources.Food;
 import model.resources.Gold;
@@ -15,18 +17,17 @@ import java.io.Serializable;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Timer;
-import java.util.TimerTask;
 
 public class Village extends Guard implements Construct, Serializable {
-	private ArrayList<Building> buildings;
-	private Gold gold;
-	private Iron iron;
-	private Wood wood;
-	private Food food;
-	private ArrayList<Combatant> combatees;
+	private final ArrayList<Building> buildings;
+	private final Gold gold;
+	private final Iron iron;
+	private final Wood wood;
+	private final Food food;
+	private final ArrayList<Combatant> combatees;
 	private int combatantTimer = 0;
-	private Timer timer = new Timer();
-	
+	private final Timer timer = new Timer();
+
 	public Village() {
 		buildings = new ArrayList<>();
 		buildings.add(new VillageHall(100,100));
@@ -53,6 +54,9 @@ public class Village extends Guard implements Construct, Serializable {
 		this.food = food;
 		this.buildings = buildings;
 		this.combatees = combatees;
+		for(Combatant c : combatees) {
+			combatantTimer += c.getUpgradeTime();
+		}
 	}
 		
 	public boolean canConstruct(Building building) {
@@ -69,6 +73,7 @@ public class Village extends Guard implements Construct, Serializable {
 			gold.decrease(building.goldCost(building.level()));
 			wood.decrease(building.woodCost(building.level()));
 			building.setUpgrading(true);
+			building.setUpgradeTime(building.upgradeTime(building.level()));
 			
 			if(building instanceof ProductionBuilding) {
 				@SuppressWarnings("rawtypes")
@@ -77,8 +82,7 @@ public class Village extends Guard implements Construct, Serializable {
 						, ProductionFrequency.time * 1000, ProductionFrequency.time * 1000);
 			}
 
-			timer.schedule(new ConstructionTimer(building,this),
-					building.upgradeTime(building.level())*1000);
+			timer.scheduleAtFixedRate(new BuildingConstructionTimer(this, building), 0, 1000);
 		}
 	} // Creating a new construction project (new building)
 	
@@ -94,13 +98,15 @@ public class Village extends Guard implements Construct, Serializable {
 			iron.decrease(combatant.ironCost(combatant.level()));
 			gold.decrease(combatant.goldCost(combatant.level()));
 			wood.decrease(combatant.woodCost(combatant.level()));
-			combatantTimer += combatant.upgradeTime(combatant.level()) * 1000;
-			timer.schedule(new CombatantTrainingTimer(combatant,this)
-					, combatantTimer);
+			combatantTimer += combatant.upgradeTime(combatant.level());
+			combatant.setUpgrading(true);
+			combatant.setUpgradeTime(combatantTimer);
+			combatees.add(combatant);
+			timer.scheduleAtFixedRate(new CombatantTrainingTimer(this,combatant), 0, 1000);
 		}
 	} // Creating a new individual in the village (new combatant)
 	
-	public boolean canTrainIndividual(ProductionBuilding<ProductionHabitant> building) {
+	public boolean canTrainHabitant(ProductionBuilding<ProductionHabitant> building) {
 		ProductionHabitant h;
 		
 		if(building.canAddWorker()) {
@@ -115,18 +121,19 @@ public class Village extends Guard implements Construct, Serializable {
 		&& h.goldCost(h.level()) <= getGold());
 	}
 	
-	public void trainIndividual(ProductionBuilding<ProductionHabitant> building) {
-		if(canTrainIndividual(building)) {
+	public void trainHabitant(ProductionBuilding<ProductionHabitant> building) {
+		if(canTrainHabitant(building)) {
 			new Sound("/sounds/building_construct.wav").play();
 			building.addWorker();
 			ProductionHabitant h = building.removeWorker(building.numOfWorkers() - 1);
 			gold.decrease(h.goldCost(h.level()));
 			building.setTraining(true);
+			h.setUpgrading(true);
+			h.setUpgradeTime(h.level());
 			
-			timer.schedule(new WorkerTrainingTimer(building,this),
-					h.upgradeTime(h.level()) * 1000);
+			timer.scheduleAtFixedRate(new WorkerTrainingTimer(this, building, h), 0, 1000);
 		}
-	}
+	} // Creating a new production habitant for a production building
 	
 	@SuppressWarnings("rawtypes")
 	public boolean canUpgrade(Building building) {
@@ -149,11 +156,11 @@ public class Village extends Guard implements Construct, Serializable {
 			gold.decrease(building.goldCost(building.level()));
 			wood.decrease(building.woodCost(building.level()));
 			building.setUpgrading(true);
-			
-			timer.schedule(new UpgradeBuildingTimer(building,this),
-					building.upgradeTime(building.level())*1000);
+			building.setUpgradeTime(building.upgradeTime(building.level()));
+
+			timer.scheduleAtFixedRate(new BuildingUpgradeTimer(this, building), 0, 1000);
 		}
-	}
+	} // upgrading a building
 	
 	@SuppressWarnings("rawtypes")
 	public boolean canUpgradeHabitant(ProductionBuilding building) {
@@ -165,7 +172,8 @@ public class Village extends Guard implements Construct, Serializable {
 		return (h.canUpgrade()
 		&& h.goldCost(h.level() + 1) <= getGold()
 		&& !building.isTraining()
-		&& !building.isUpgrading());
+		&& !building.isUpgrading()
+		&& !h.isUpgrading());
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -175,9 +183,10 @@ public class Village extends Guard implements Construct, Serializable {
 			new Sound("/sounds/building_construct.wav").play();
 			gold.decrease(h.goldCost(h.level() + 1));
 			building.setTraining(true);
-			
-			timer.schedule(new UpgradeProductionHabitantTimer(building,h,this),
-					h.upgradeTime(h.level() + 1) * 1000);
+			h.setUpgradeTime(h.upgradeTime(h.level()));
+			h.setUpgrading(true);
+
+			timer.scheduleAtFixedRate(new WorkerUpgradeTimer(this, building, h), 0, 1000);
 		}
 	}
 
@@ -195,18 +204,6 @@ public class Village extends Guard implements Construct, Serializable {
 	}
 
 	public int getFood() { return food.getQuantity(); }
-	
-	public int popSize() {
-		return 0;
-	}
-	
-	public int numInArmy() {
-		return combatees.size();
-	}
-	
-	public int numOfBuildings() {
-		return buildings.size();
-	}
 
 	public ArrayList<Building> getBuildings() {
 		return buildings;
@@ -226,6 +223,10 @@ public class Village extends Guard implements Construct, Serializable {
 				return i;
 		}
 		return null;
+	}
+
+	public int getCombatantTimer() {
+		return combatantTimer;
 	}
 
 	@Override

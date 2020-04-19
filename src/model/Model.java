@@ -19,10 +19,10 @@ import java.util.ArrayList;
  */
 public class Model {
     // Instance variables
-    private boolean buildMode = false;
-    private boolean upgradeMode = false;
     private boolean trainingMode = false;
     private boolean attackMode = false;
+    private boolean buildMode = false;
+    private boolean upgradeMode = false;
 
     private Village village;
     private Building selectedNewConstruction = null;
@@ -51,14 +51,6 @@ public class Model {
      */
     public boolean placedACombatant() {
         return placedACombatant;
-    }
-
-    public boolean isUpgradeMode() {
-        return upgradeMode;
-    }
-
-    public void setUpgradeMode(boolean upgradeMode) {
-        this.upgradeMode = upgradeMode;
     }
 
     public boolean isTrainingMode() {
@@ -127,14 +119,6 @@ public class Model {
         this.mouseClickedY = mouseClickedY;
     }
 
-    public boolean isBuildMode() {
-        return buildMode;
-    }
-
-    public void setBuildMode(boolean buildMode) {
-        this.buildMode = buildMode;
-    }
-
     public boolean isAttackMode() {
         return attackMode;
     }
@@ -156,6 +140,22 @@ public class Model {
         attack.setAttackingVillage(village);
     }
 
+    public boolean isBuildMode() {
+        return buildMode;
+    }
+
+    public void setBuildMode(boolean buildMode) {
+        this.buildMode = buildMode;
+    }
+
+    public boolean isUpgradeMode() {
+        return upgradeMode;
+    }
+
+    public void setUpgradeMode(boolean upgradeMode) {
+        this.upgradeMode = upgradeMode;
+    }
+
     public void endAttack() {
         attack.clearAttackingVillage();
         attack.clearDefendingVillage();
@@ -163,8 +163,6 @@ public class Model {
         placedACombatant = false;
         selectedForAttackPlacement = null;
         attackMode = false;
-        buildMode = false;
-        upgradeMode = false;
         trainingMode = false;
     }
 

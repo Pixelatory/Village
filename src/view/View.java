@@ -230,21 +230,23 @@ public final class View {
             int soldier = 0;
 
             for (Combatant c : m.getAttackingVillage().getCombatees()) {
-                switch(c.getName()) {
-                    case "Archer":
-                        archer++;
-                        break;
-                    case "Catapult":
-                        catapult++;
-                        break;
-                    case "Knight":
-                        knight++;
-                        break;
-                    case "Soldier":
-                        soldier++;
-                        break;
-                    default:
-                        throw new UnknownCombatantException();
+                if(!c.isUpgrading()) {
+                    switch (c.getName()) {
+                        case "Archer":
+                            archer++;
+                            break;
+                        case "Catapult":
+                            catapult++;
+                            break;
+                        case "Knight":
+                            knight++;
+                            break;
+                        case "Soldier":
+                            soldier++;
+                            break;
+                        default:
+                            throw new UnknownCombatantException();
+                    }
                 }
             }
 
@@ -294,7 +296,7 @@ public final class View {
     private int countCombatants(ArrayList<Combatant> combatees, String name) {
         int count = 0;
         for (Combatant combatee : combatees) {
-            if (combatee.getName().equals(name))
+            if (!combatee.isUpgrading() && combatee.getName().equals(name))
                 count++;
         }
         return count;
