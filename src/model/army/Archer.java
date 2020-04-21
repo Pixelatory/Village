@@ -78,4 +78,11 @@ public class Archer extends Combatant {
 	public int upgradeTime(int level) {
 		return UpgradeTimes.ARCHER[level - 1];
 	}
+
+	@Override
+	public Object clone() {
+		Archer a = new Archer(xPos(),yPos());
+		a.setLevel(level());
+		return a;
+	}
 }

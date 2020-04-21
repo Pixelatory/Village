@@ -1,14 +1,9 @@
 package model.buildings;
 
-import java.awt.Color;
-
 import engine.renderPrimitives.Rectangle;
-import model.statics.GoldCosts;
-import model.statics.IronCosts;
-import model.statics.MaxHealthPoints;
-import model.statics.MaxLevels;
-import model.statics.WoodCosts;
-import utility.Area;
+import model.statics.*;
+
+import java.awt.*;
 
 /**
  * Class representing a Village Hall.
@@ -28,10 +23,11 @@ public final class VillageHall extends Building {
 	 */
 	public VillageHall(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(25,25);
-		this.rect = new Rectangle(pos.getX(), pos.getY(), area.getWidth(), area.getHeight(), Color.white);
-		this.upgradingRect = new Rectangle(this.rect);
-		this.upgradingRect.setColour(Color.gray);
+		setArea(25,25);
+		Rectangle rect = new Rectangle(xPos(), yPos(), width(), height(), Color.white);
+		setDefaultRect(rect);
+		Rectangle upgradingRect = new Rectangle(xPos(), yPos(), width(), height(), Color.gray);
+		setUpgradingRect(upgradingRect);
 	}
 	
 	@Override
@@ -42,11 +38,6 @@ public final class VillageHall extends Building {
 	@Override
 	public int maxLevel() {
 		return MaxLevels.VILLAGE_HALL;
-	}
-
-	@Override
-	public void setLevel(int level) {
-		this.level = level;
 	}
 
 	@Override
@@ -72,5 +63,12 @@ public final class VillageHall extends Building {
 	@Override
 	public String getName() {
 		return "Village Hall";
+	}
+
+	@Override
+	public Object clone() {
+		VillageHall v = new VillageHall(xPos(),yPos());
+		v.setLevel(level());
+		return v;
 	}
 }

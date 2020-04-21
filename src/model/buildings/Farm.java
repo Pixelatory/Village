@@ -3,7 +3,6 @@ package model.buildings;
 import engine.renderPrimitives.Rectangle;
 import model.habitants.Worker;
 import model.statics.*;
-import utility.Area;
 
 import java.awt.*;
 
@@ -25,10 +24,11 @@ public final class Farm extends FoodProduction {
 	 */
 	public Farm(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(25,25);
-		this.rect = new Rectangle(pos.getX(), pos.getY(), area.getWidth(), area.getHeight(), new Color(100,175,25,255));
-		this.upgradingRect = new Rectangle(this.rect);
-		this.upgradingRect.setColour(Color.gray);
+		setArea(25,25);
+		Rectangle rect = new Rectangle(xPos(), yPos(), width(), height(), new Color(100,175,25,255));
+		setDefaultRect(rect);
+		Rectangle upgradingRect = new Rectangle(xPos(), yPos(), width(), height(), Color.gray);
+		setUpgradingRect(upgradingRect);
 	}
 
 	@Override
@@ -78,8 +78,9 @@ public final class Farm extends FoodProduction {
 	}
 
 	@Override
-	public void takeDamage(float amount) {
-		// TODO Take damage
-
+	public Object clone() {
+		Farm f = new Farm(xPos(),yPos());
+		f.setLevel(level());
+		return f;
 	}
 }

@@ -2,6 +2,7 @@ package model.army;
 
 import engine.renderPrimitives.Circle;
 import model.attack.CombatantDamager;
+import model.attack.Generative;
 import model.buildings.Building;
 import model.village.Attackable;
 import model.village.Movable;
@@ -19,17 +20,17 @@ import utility.Position;
  * @see Knight
  * @see Soldier
  */
-public abstract class Combatant implements Trainable, Attackable, CombatantDamager<Building>, Upgradable, Movable {
+public abstract class Combatant implements Trainable, Attackable, CombatantDamager<Building>, Upgradable, Movable, Generative {
 	protected float hp;
 	protected Position pos;
 	protected int level = 1;
 	protected Area area;
 	protected Circle circle;
-	protected boolean isUpgrading = false;
+	protected volatile boolean isUpgrading = false;
 	protected boolean canAttack = true;
 	protected String name;
 	protected boolean isPlaced = false;
-	private int upgradeTime;
+	private volatile int upgradeTime;
 
 	/**
 	 * Sets the initial hp and position values.
@@ -45,11 +46,11 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 		this.pos = new Position(xPos,yPos);
 	}
 
-	public int getUpgradeTime() {
+	public synchronized int getUpgradeTime() {
 		return upgradeTime;
 	}
 
-	public void setUpgradeTime(int upgradeTime) {
+	public synchronized void setUpgradeTime(int upgradeTime) {
 		this.upgradeTime = upgradeTime;
 	}
 
@@ -87,7 +88,7 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 		return this.level;
 	}
 	
-	public void setUpgrading(boolean b) {
+	public synchronized void setUpgrading(boolean b) {
 		this.isUpgrading = b;
 	}
 	
@@ -99,7 +100,7 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 		this.canAttack = value;
 	}
 	
-	public boolean isUpgrading() {
+	public synchronized boolean isUpgrading() {
 		return isUpgrading;
 	}
 	
@@ -133,6 +134,10 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 		this.isPlaced = value;
 	}
 
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
 	public int xPos() {
 		return pos.getX();
 	}
@@ -150,4 +155,6 @@ public abstract class Combatant implements Trainable, Attackable, CombatantDamag
 		pos.setY(yPos);
 		circle.setY(yPos);
 	}
+
+	public abstract Object clone();
 }

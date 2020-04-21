@@ -2,7 +2,6 @@ package model.buildings;
 
 import engine.renderPrimitives.Rectangle;
 import model.statics.*;
-import utility.Area;
 
 import java.awt.*;
 
@@ -24,10 +23,11 @@ public final class Cannon extends DefensiveBuilding {
 	 */
 	public Cannon(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(25,25);
-		this.rect = new Rectangle(pos.getX(), pos.getY(), area.getWidth(), area.getHeight(), Color.red);
-		this.upgradingRect = new Rectangle(this.rect);
-		this.upgradingRect.setColour(Color.gray);
+		setArea(25,25);
+		Rectangle rect = new Rectangle(xPos(), yPos(), width(), height(), Color.red);
+		setDefaultRect(rect);
+		Rectangle upgradingRect = new Rectangle(xPos(), yPos(), width(), height(), Color.gray);
+		setUpgradingRect(upgradingRect);
 	}
 	
 	@Override
@@ -79,5 +79,11 @@ public final class Cannon extends DefensiveBuilding {
 	public String getName() {
 		return "Cannon";
 	}
-	
+
+	@Override
+	public Object clone() {
+		Cannon c = new Cannon(xPos(),yPos());
+		c.setLevel(level());
+		return c;
+	}
 }

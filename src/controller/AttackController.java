@@ -3,8 +3,7 @@ package controller;
 import engine.GameContainer;
 import model.Model;
 import model.army.Combatant;
-import model.buildings.Building;
-import model.buildings.DefensiveBuilding;
+import model.buildings.*;
 import utility.GameState;
 import utility.Position;
 import utility.timers.AttackTimerTask;
@@ -36,14 +35,24 @@ class AttackController {
                     if (c.enemyInSight(b) && b.HP() > 0) {
                         didAttack = true;
                         if (c.canAttack()) {
-                            Controller.timer.schedule(new AttackTimerTask(c) {
-                                @Override
-                                public void run() {
-                                    c.setCanAttack(true);
-                                }
-                            }, (long) (c.attackSpeed() * 1000));
+                            Controller.timer.schedule(new AttackTimerTask(c), (long) (c.attackSpeed() * 1000));
                             c.setCanAttack(false);
                             c.attack(b);
+                            if(b.HP() <= 0) {
+                                if(b instanceof GoldMine) {
+                                    int goldGained = (model.getDefendingVillage().getGold()) / model.getDefendingVillage().getBuildings().size();
+                                    model.getDefendingVillage().decreaseGold(goldGained);
+                                    model.getAttackingVillage().increaseGold(goldGained);
+                                } else if(b instanceof IronMine) {
+                                    int ironGained = (model.getDefendingVillage().getIron()) / model.getDefendingVillage().getBuildings().size();
+                                    model.getDefendingVillage().decreaseIron(ironGained);
+                                    model.getAttackingVillage().increaseIron(ironGained);
+                                } else if(b instanceof LumberMill) {
+                                    int woodGained = (model.getDefendingVillage().getWood()) / model.getDefendingVillage().getBuildings().size();
+                                    model.getDefendingVillage().decreaseWood(woodGained);
+                                    model.getAttackingVillage().increaseWood(woodGained);
+                                }
+                            }
                         }
                         break;
                     }
@@ -114,7 +123,7 @@ class AttackController {
 
             if(Controller.mouseInBounds(view.getArcherSymbol())) {
                 for (Combatant c : combatees) {
-                    if (c.getName().equals("Archer")) {
+                    if (c.getName().equals("Archer") && !c.isUpgrading()) {
                         model.setSelectedForAttackPlacement(c);
                         view.getClickSound().play();
                         return;
@@ -122,7 +131,7 @@ class AttackController {
                 }
             } else if (Controller.mouseInBounds(view.getSoldierSymbol())) {
                 for(Combatant c : combatees) {
-                    if(c.getName().equals("Soldier")) {
+                    if(c.getName().equals("Soldier") && !c.isUpgrading()) {
                         model.setSelectedForAttackPlacement(c);
                         view.getClickSound().play();
                         return;
@@ -130,7 +139,7 @@ class AttackController {
                 }
             } else if (Controller.mouseInBounds(view.getCatapultSymbol())) {
                 for(Combatant c : combatees) {
-                    if(c.getName().equals("Catapult")) {
+                    if(c.getName().equals("Catapult") && !c.isUpgrading()) {
                         model.setSelectedForAttackPlacement(c);
                         view.getClickSound().play();
                         return;
@@ -138,7 +147,7 @@ class AttackController {
                 }
             } else if (Controller.mouseInBounds(view.getKnightSymbol())) {
                 for(Combatant c : combatees) {
-                    if(c.getName().equals("Knight")) {
+                    if(c.getName().equals("Knight") && !c.isUpgrading()) {
                         model.setSelectedForAttackPlacement(c);
                         view.getClickSound().play();
                         return;
@@ -157,7 +166,7 @@ class AttackController {
                 combatees.remove(placedCombatant);
 
                 for(Combatant c : combatees) { // This is for when we place it, instead of clicking on the toolbar again we'll just get the next combatant
-                    if(c.getName().equals(model.getSelectedForAttackPlacement().getName())) {
+                    if(c.getName().equals(model.getSelectedForAttackPlacement().getName()) && !c.isUpgrading()) {
                         model.setSelectedForAttackPlacement(c);
                         break;
                     }
@@ -190,17 +199,39 @@ class AttackController {
             } else {
                 model.getSelectedForAttackPlacement().setXPos(Controller.mouseX);
                 model.getSelectedForAttackPlacement().setYPos(Controller.mouseY);
-                return;
             }
         } // CONTROLLING SELECTED FOR ATTACK PLACEMENT, WHETHER
 
         if(view.getToolbar().isVisible()
         && Controller.mouseInBounds(view.getEndBattleIcon())
-        && Controller.leftClickUp(gc)
-        && model.placedACombatant()) {
+        && Controller.leftClickUp(gc)) {
             model.endAttack();
             GameState.save(model.getVillage());
             view.getClickSound().play();
         } // ENDING THE BATTLE
+    }
+
+    private int goldGained(Building b, int totalGold, int numOfBuildings) {
+        if(b instanceof GoldMine)
+            return (totalGold / 5) / numOfBuildings;
+        return 0;
+    }
+
+    private int ironGained(Building b, int totalIron, int numOfBuildings) {
+        if(b instanceof IronMine)
+            return (totalIron / 5) / numOfBuildings;
+        return 0;
+    }
+
+    private int woodGained(Building b, int totalWood, int numOfBuildings) {
+        if(b instanceof LumberMill)
+            return (totalWood / 5) / numOfBuildings;
+        return 0;
+    }
+
+    private int foodGained(Building b, int totalFood, int numOfBuildings) {
+        if(b instanceof Farm)
+            return (totalFood / 5) / numOfBuildings;
+        return 0;
     }
 }

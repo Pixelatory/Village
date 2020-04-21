@@ -71,6 +71,7 @@ public final class Controller {
             model.setUpgradeMode(false);
             model.setSelectedNewConstruction(null);
             model.setSelectedForUpgrade(null);
+            model.setSelectedForAttackPlacement(null);
             view.getClickSound().play();
             return;
         } // RIGHT CLICKING ANYWHERE WHEN TOOLBAR IS VISIBLE
@@ -121,10 +122,19 @@ public final class Controller {
         && model.getCombatees().size() > 0
         && mouseInBounds(view.getAttackIcon())
         && leftClickUp(gc)) {
-            view.getClickSound().play();
-            model.setAttackMode(true);
-            model.startAttack();
-            return;
+            boolean atLeastOneNotUpgrading = false;
+            for(Combatant c : model.getCombatees()) {
+                if(!c.isUpgrading()) {
+                    atLeastOneNotUpgrading = true;
+                    break;
+                }
+            }
+
+            if(atLeastOneNotUpgrading) {
+                view.getClickSound().play();
+                model.setAttackMode(true);
+                model.startAttack();
+            }
         } // CLICKING ON ATTACK BUTTON
     }
 

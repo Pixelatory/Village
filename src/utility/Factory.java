@@ -1,13 +1,18 @@
 package utility;
 
-import java.util.Random;
+import engine.GameContainer;
+import model.attack.Generative;
 
-public class Factory<E> {
+import java.util.concurrent.ThreadLocalRandom;
 
-    Random rand = new Random();
+public class Factory<E extends Generative> {
 
     public E create(E[] entities) {
-        int randNum = rand.nextInt(entities.length);
-        return entities[randNum];
+        int randNum = ThreadLocalRandom.current().nextInt(entities.length);
+        E entity = (E) entities[randNum].clone();
+        entity.setXPos(ThreadLocalRandom.current().nextInt(100,GameContainer.getWidth() - 100));
+        entity.setYPos(ThreadLocalRandom.current().nextInt(100,GameContainer.getHeight() - 100));
+        entity.setLevel(ThreadLocalRandom.current().nextInt(entity.maxLevel()) + 1);
+        return entity;
     }
 }

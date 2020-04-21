@@ -87,4 +87,11 @@ public class Soldier extends Combatant {
 	public int upgradeTime(int level) {
 		return UpgradeTimes.SOLDIER[level - 1];
 	}
+
+	@Override
+	public Object clone() {
+		Soldier s = new Soldier(xPos(), yPos());
+		s.setLevel(level());
+		return s;
+	}
 }

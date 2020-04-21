@@ -1,17 +1,10 @@
 package model.buildings;
 
-import java.awt.Color;
-
 import engine.renderPrimitives.Rectangle;
 import model.habitants.IronMiner;
-import model.statics.GoldCosts;
-import model.statics.IronCosts;
-import model.statics.MaxHealthPoints;
-import model.statics.MaxLevels;
-import model.statics.UpgradeTimes;
-import model.statics.WoodCosts;
-import model.statics.WorkerCapacities;
-import utility.Area;
+import model.statics.*;
+
+import java.awt.*;
 
 /**
  * Class representing an Iron Mine.
@@ -30,11 +23,12 @@ public final class IronMine extends MiningProduction<IronMiner> {
 	 * @see MiningProduction
 	 */
 	public IronMine(int xPos, int yPos) {
-		super(xPos,yPos);
-		this.area = new Area(25,25);
-		this.rect = new Rectangle(pos.getX(), pos.getY(), area.getWidth(), area.getHeight(), new Color(114,110,108,255));
-		this.upgradingRect = new Rectangle(this.rect);
-		this.upgradingRect.setColour(Color.gray);
+		super(xPos, yPos);
+		setArea(25,25);
+		Rectangle rect = new Rectangle(xPos(), yPos(), width(), height(), new Color(114,110,108,255));
+		setDefaultRect(rect);
+		Rectangle upgradingRect = new Rectangle(xPos(), yPos(), width(), height(), Color.gray);
+		setUpgradingRect(upgradingRect);
 	}
 	
 	@Override
@@ -81,6 +75,13 @@ public final class IronMine extends MiningProduction<IronMiner> {
 	@Override
 	public String getName() {
 		return "Iron Mine";
+	}
+
+	@Override
+	public Object clone() {
+		IronMine i = new IronMine(xPos(),yPos());
+		i.setLevel(level());
+		return i;
 	}
 
 }

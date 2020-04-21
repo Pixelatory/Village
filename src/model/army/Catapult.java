@@ -87,4 +87,11 @@ public class Catapult extends Combatant {
 	public int upgradeTime(int level) {
 		return UpgradeTimes.CATAPULT[level - 1];
 	}
+
+	@Override
+	public Object clone() {
+		Catapult c = new Catapult(xPos(),yPos());
+		c.setLevel(level());
+		return c;
+	}
 }

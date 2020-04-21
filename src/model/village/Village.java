@@ -25,7 +25,6 @@ public class Village extends Guard implements Construct, Serializable {
 	private final Wood wood;
 	private final Food food;
 	private final ArrayList<Combatant> combatees;
-	private int combatantTimer = 0;
 	private final Timer timer = new Timer();
 
 	public Village() {
@@ -54,9 +53,16 @@ public class Village extends Guard implements Construct, Serializable {
 		this.food = food;
 		this.buildings = buildings;
 		this.combatees = combatees;
-		for(Combatant c : combatees) {
-			combatantTimer += c.getUpgradeTime();
-		}
+	}
+
+	public Village(ArrayList<Building> buildings) {
+		this.buildings = (ArrayList<Building>) buildings.clone();
+		buildings.add(new VillageHall(100,100));
+		gold = new Gold();
+		wood = new Wood();
+		iron = new Iron();
+		food = new Food();
+		combatees = new ArrayList<>();
 	}
 		
 	public boolean canConstruct(Building building) {
@@ -98,9 +104,14 @@ public class Village extends Guard implements Construct, Serializable {
 			iron.decrease(combatant.ironCost(combatant.level()));
 			gold.decrease(combatant.goldCost(combatant.level()));
 			wood.decrease(combatant.woodCost(combatant.level()));
-			combatantTimer += combatant.upgradeTime(combatant.level());
+
+			int highestTime = 0;
+			for(Combatant c : combatees) {
+				if(c.isUpgrading() && c.getUpgradeTime() > highestTime)
+					highestTime = c.getUpgradeTime();
+			}
 			combatant.setUpgrading(true);
-			combatant.setUpgradeTime(combatantTimer);
+			combatant.setUpgradeTime(highestTime + combatant.upgradeTime(combatant.level()));
 			combatees.add(combatant);
 			timer.scheduleAtFixedRate(new CombatantTrainingTimer(this,combatant), 0, 1000);
 		}
@@ -225,8 +236,28 @@ public class Village extends Guard implements Construct, Serializable {
 		return null;
 	}
 
-	public int getCombatantTimer() {
-		return combatantTimer;
+	public void increaseGold(int amount) {
+		gold.increase(amount);
+	}
+
+	public void decreaseGold(int amount) {
+		gold.decrease(amount);
+	}
+
+	public void increaseWood(int amount) {
+		wood.increase(amount);
+	}
+
+	public void decreaseWood(int amount) {
+		wood.decrease(amount);
+	}
+
+	public void increaseIron(int amount) {
+		iron.increase(amount);
+	}
+
+	public void decreaseIron(int amount) {
+		iron.decrease(amount);
 	}
 
 	@Override

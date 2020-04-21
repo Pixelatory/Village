@@ -6,6 +6,7 @@ import model.buildings.Building;
 import model.village.Village;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Contains the model of the game.<br>
@@ -33,6 +34,8 @@ public class Model {
     private int mouseY = 0;
     private int mouseClickedX = 0;
     private int mouseClickedY = 0;
+
+    private Random rand = new Random();
 
     private boolean placedACombatant = false;
 
@@ -136,7 +139,11 @@ public class Model {
     }
 
     public void startAttack() {
-        attack.setDefendingVillage(new Village(village));
+        Village generatedVillage = new Village(attack.generateComparedTo(village));
+        generatedVillage.increaseGold(100000);
+        generatedVillage.increaseWood(100000);
+        generatedVillage.increaseIron(100000);
+        attack.setDefendingVillage(new Village(attack.generateComparedTo(village)));
         attack.setAttackingVillage(village);
     }
 
@@ -157,13 +164,15 @@ public class Model {
     }
 
     public void endAttack() {
+        getAttackingVillage().increaseIron((int) (getAttackScore() * 10));
+        getAttackingVillage().increaseWood((int) (getAttackScore() * 10));
+        getAttackingVillage().increaseGold((int) (getAttackScore() * 10));
         attack.clearAttackingVillage();
         attack.clearDefendingVillage();
         attack.clearPlacedCombatants();
         placedACombatant = false;
         selectedForAttackPlacement = null;
         attackMode = false;
-        trainingMode = false;
     }
 
     public void placeCombatant(Combatant combatant) {
@@ -171,7 +180,7 @@ public class Model {
         placedACombatant = true;
     }
 
-    public int getAttackScore() {
+    public float getAttackScore() {
         return attack.attackScore();
     }
 

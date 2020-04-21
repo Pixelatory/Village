@@ -9,7 +9,9 @@ package model.village;
  *
  */
 public interface Upgradable {
-	
+
+	public void setLevel(int level);
+
 	/**
 	 * A function that performs tasks required in order to upgrade this upgradable object.
 	 */

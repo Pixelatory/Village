@@ -1,9 +1,12 @@
 package model.attack;
 
+import exceptions.EvolutionPopulateException;
 import model.army.Combatant;
 import model.buildings.Building;
+import model.statics.FactoryEntities;
 import model.village.Village;
 import utility.ComparedGenerator;
+import utility.ai.evolutionary.BuildingEvolution;
 
 import java.util.ArrayList;
 
@@ -29,8 +32,16 @@ public class Attack implements ComparedGenerator<Village> {
 	 * @param village Village object
 	 * @return arraylist of combatants
 	 */
-	public ArrayList<Combatant> generateComparedTo(Village village) {
-		return null;
+	public ArrayList<Building> generateComparedTo(Village village) {
+		BuildingEvolution b;
+		try {
+			b = new BuildingEvolution(village.getBuildings().size(), FactoryEntities.buildings, village.getBuildings());
+		} catch (EvolutionPopulateException e) {
+			e.printStackTrace();
+			return null;
+		}
+		ArrayList<Building> br = b.process();
+		return br;
 	}
 
 	public void setAttackingVillage(Village village) {
@@ -83,26 +94,26 @@ public class Attack implements ComparedGenerator<Village> {
 		placedCombatants.clear();
 	}
 
-	public int attackScore() {
-		int count = 0;
+	public float attackScore() {
+		float count = 0f;
 
 		for(Building b : defendingVillage.getBuildings()) {
-			if(b.HP() == 0)
+			if(b.HP() <= 0)
 				count++;
 		}
 
-		return count / defendingVillage.getBuildings().size();
+		return (count / defendingVillage.getBuildings().size()) * 100;
 	}
 
 	public int woodGained() {
-		return defendingVillage.getWood() - originalWoodQuantity;
+		return originalWoodQuantity - defendingVillage.getWood();
 	}
 
 	public int goldGained() {
-		return defendingVillage.getGold() - originalGoldQuantity;
+		return originalGoldQuantity - defendingVillage.getGold();
 	}
 
 	public int ironGained() {
-		return defendingVillage.getIron() - originalIronQuantity;
+		return originalIronQuantity - defendingVillage.getIron();
 	}
 }

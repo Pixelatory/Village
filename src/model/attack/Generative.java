@@ -1,10 +1,9 @@
 package model.attack;
 
-public interface Generative {
-    public void setLevel(int level);
-    public int level();
-    public int xPos();
-    public int yPos();
-    public void setXPos(int xPos);
-    public void setYPos(int yPos);
+import model.village.Movable;
+import model.village.Upgradable;
+
+public interface Generative extends Cloneable, Movable, Upgradable {
+    public String getName();
+    public Object clone();
 }

@@ -18,15 +18,15 @@ import java.io.Serializable;
  * @see ProductionBuilding
  */
 public abstract class Building implements Upgradable, Attackable, Generative, Movable, Serializable {
-	protected float hp;
-	protected int level = 1;
-	protected Position pos;
-	protected Area area;
-	protected Rectangle rect;
-	protected Rectangle upgradingRect;
-	protected boolean isUpgrading = false;
-	protected boolean isMovable = true;
-	protected int upgradeTime;
+	private float hp;
+	private int level = 1;
+	private Position pos;
+	private Area area;
+	private Rectangle rect;
+	private Rectangle upgradingRect;
+	private boolean isUpgrading = false;
+	private boolean isMovable = true;
+	private int upgradeTime;
 	
 	/**
 	 * A function which sets the initial hp value, and position of the newly created Building.
@@ -44,7 +44,7 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	 * @return string value
 	 */
 	public abstract String getName();
-	
+
 	public boolean canUpgrade() {
 		return level() < maxLevel();
 	}
@@ -54,6 +54,10 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 			this.level++;
 			this.hp = maxHP();
 		}
+	}
+
+	protected void setArea(int width, int height) {
+		this.area = new Area(width,height);
 	}
 	
 	public float HP() {
@@ -166,6 +170,22 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 
 		return new Rectangle(0,0,10,10, Color.white);
 	}
+
+	protected void setDefaultRect(Rectangle rect) {
+		this.rect = rect;
+	}
+
+	protected void setUpgradingRect(Rectangle rect) {
+		this.upgradingRect = rect;
+	}
+
+	protected Rectangle getDefaultRect() {
+		return this.rect;
+	}
+
+	protected Rectangle getUpgradingRect() {
+		return this.upgradingRect;
+	}
 	
 	/**
 	 * A function which sets the level of this Building.
@@ -207,4 +227,6 @@ public abstract class Building implements Upgradable, Attackable, Generative, Mo
 	public int getUpgradeTime() {
 		return upgradeTime;
 	}
+
+	public abstract Object clone();
 }

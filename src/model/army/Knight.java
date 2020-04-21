@@ -88,4 +88,10 @@ public class Knight extends Combatant {
 		return UpgradeTimes.KNIGHT[level - 1];
 	}
 
+	@Override
+	public Object clone() {
+		Knight k = new Knight(xPos(),yPos());
+		k.setLevel(level());
+		return k;
+	}
 }

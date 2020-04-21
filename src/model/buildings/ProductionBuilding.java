@@ -1,10 +1,10 @@
 package model.buildings;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-
 import engine.renderPrimitives.Rectangle;
 import model.habitants.ProductionHabitant;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * General abstract class that encompasses everything a building should do/have if it contains workers, and generates model.resources.
@@ -47,9 +47,9 @@ public abstract class ProductionBuilding<E extends ProductionHabitant> extends B
 	@Override
 	public Rectangle getRect() {
 		if(isTraining() || isUpgrading())
-			return upgradingRect;
+			return getUpgradingRect();
 		
-		return rect;
+		return getDefaultRect();
 	}
 	
 	/**

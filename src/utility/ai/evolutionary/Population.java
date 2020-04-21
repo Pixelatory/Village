@@ -13,11 +13,15 @@ public class Population<E extends Generative> {
 
     public Population(int size, E[] entities) throws EvolutionPopulateException {
         this.entities = entities;
-        pop = new ArrayList<>(size);
+        pop = new ArrayList<>();
         factory = new Factory<>();
 
-        for(int i=0;i<pop.size();i++)
-            setChromosome(i);
+        for(int i=0;i<size;i++)
+            addChromosome();
+    }
+
+    public Population() {
+        pop = new ArrayList<>();
     }
 
     public E getChromosome(int index) {
@@ -30,5 +34,21 @@ public class Population<E extends Generative> {
 
     public void setChromosome(int index) {
         pop.set(index,factory.create(entities));
+    }
+
+    public void addChromosome() {
+        pop.add(factory.create(entities));
+    }
+
+    public void addChromosome(E e) {
+        pop.add(e);
+    }
+
+    public int size() {
+        return pop.size();
+    }
+
+    public ArrayList<E> getPopulation() {
+        return pop;
     }
 }

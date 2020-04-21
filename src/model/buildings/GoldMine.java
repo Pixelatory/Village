@@ -1,17 +1,10 @@
 package model.buildings;
 
-import java.awt.Color;
-
 import engine.renderPrimitives.Rectangle;
 import model.habitants.GoldMiner;
-import model.statics.GoldCosts;
-import model.statics.IronCosts;
-import model.statics.MaxHealthPoints;
-import model.statics.MaxLevels;
-import model.statics.UpgradeTimes;
-import model.statics.WoodCosts;
-import model.statics.WorkerCapacities;
-import utility.Area;
+import model.statics.*;
+
+import java.awt.*;
 
 /**
  * Class representing a Gold Mine.
@@ -31,10 +24,11 @@ public final class GoldMine extends MiningProduction<GoldMiner> {
 	 */
 	public GoldMine(int xPos, int yPos) {
 		super(xPos, yPos);
-		this.area = new Area(25,25);
-		this.rect = new Rectangle(pos.getX(), pos.getY(), area.getWidth(), area.getHeight(), new Color(255,196,44,255));
-		this.upgradingRect = new Rectangle(this.rect);
-		this.upgradingRect.setColour(Color.gray);
+		setArea(25,25);
+		Rectangle rect = new Rectangle(xPos(), yPos(), width(), height(), new Color(255,196,44,255));
+		setDefaultRect(rect);
+		Rectangle upgradingRect = new Rectangle(xPos(), yPos(), width(), height(), Color.gray);
+		setUpgradingRect(upgradingRect);
 	}
 	
 	@Override
@@ -82,5 +76,12 @@ public final class GoldMine extends MiningProduction<GoldMiner> {
 	@Override
 	public String getName() {
 		return "Gold Mine";
+	}
+
+	@Override
+	public Object clone() {
+		GoldMine g = new GoldMine(xPos(),yPos());
+		g.setLevel(level());
+		return g;
 	}
 }
