@@ -17,6 +17,7 @@ public class Client extends Thread {
     private String username;
     private String villageinfo = null;
     private PrintWriter p;
+    private JFrame frame;
 
     public Client(String ip, String username) {
         this.ip = ip;
@@ -53,16 +54,32 @@ public class Client extends Thread {
             Thread ok = new ClientThread(this);
             ok.start(); // starts the game client
 
-            while((setVillageinfo(in.readLine())) != null) {
+            while((setVillageinfo(in.readLine())) != null) { // updating the village info here
                 //System.out.println(getVillageinfo());
             }
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host " + ip);
-            System.exit(1);
+            JFrame frame = new JFrame("Error");
+            frame.setLayout(new FlowLayout());
+            frame.add(new JLabel("I don't know the host: " + ip));
+            JButton okayButton = new JButton("Okay");
+            okayButton.addActionListener(event -> frame.dispose());
+            frame.add(okayButton);
+            frame.setResizable(false);
+            frame.pack();
+            frame.setVisible(true);
         } catch (IOException e) {
             System.err.println("Couldn't get I/O for the connection to " +
                     ip);
-            System.exit(1);
+            JFrame frame = new JFrame("Error");
+            frame.setLayout(new FlowLayout());
+            frame.add(new JLabel("Couldn't get a connection to " + ip));
+            JButton okayButton = new JButton("Okay");
+            okayButton.addActionListener(event -> frame.dispose());
+            frame.add(okayButton);
+            frame.setResizable(false);
+            frame.pack();
+            frame.setVisible(true);
         }
     }
 
@@ -77,34 +94,5 @@ public class Client extends Thread {
     public synchronized String setVillageinfo(String villageinfo) {
         this.villageinfo = villageinfo;
         return getVillageinfo();
-    }
-
-    public static void main(String[] args) throws IOException {
-        JFrame frame = new JFrame("Village Game");
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel,BoxLayout.Y_AXIS));
-        JLabel title = new JLabel("Village Game");
-        JTextField serverIP = new JTextField("Server IP");
-        JTextField username = new JTextField("Username");
-        JButton connectButton = new JButton("Connect");
-
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        serverIP.setAlignmentX(Component.CENTER_ALIGNMENT);
-        username.setAlignmentX(Component.CENTER_ALIGNMENT);
-        connectButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-
-        panel.add(title);
-        panel.add(serverIP);
-        panel.add(username);
-        panel.add(connectButton);
-        frame.add(panel);
-        frame.setSize(400,150);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
-        frame.setResizable(false);
-        connectButton.addActionListener(e -> {
-            Client c = new Client(serverIP.getText(), username.getText());
-            c.start();
-        });
     }
 }
